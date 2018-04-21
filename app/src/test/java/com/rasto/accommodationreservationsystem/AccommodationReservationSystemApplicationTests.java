@@ -12,5 +12,4 @@ public class AccommodationReservationSystemApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }
