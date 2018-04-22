@@ -1,2 +1,2 @@
-# accommodation-reservation-system
-Simple accommodation reservation system.
+# accommodation-booking-system
+Simple accommodation booking system.
