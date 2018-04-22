@@ -1,6 +1,6 @@
 package com.rasto.accommodationbookingsystem.service;
 
-import com.rasto.accommodationbookingsystem.repository.entities.Accommodation;
+import com.rasto.accommodationbookingsystem.repository.entity.Accommodation;
 
 import java.util.List;
 

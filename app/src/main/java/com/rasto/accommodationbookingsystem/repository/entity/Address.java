@@ -1,6 +1,7 @@
-package com.rasto.accommodationbookingsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.repository.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,10 +11,13 @@ public class Address implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(min = 1, max = 255)
     private String country;
 
+    @Size(min = 1, max = 255)
     private String city;
 
+    @Size(min = 1, max = 255)
     private String street;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)

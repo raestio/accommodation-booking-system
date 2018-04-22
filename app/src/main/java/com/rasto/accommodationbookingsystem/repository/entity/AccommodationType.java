@@ -1,4 +1,4 @@
-package com.rasto.accommodationbookingsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.repository.entity;
 
 import com.rasto.accommodationbookingsystem.repository.AccommodationTypeEnum;
 

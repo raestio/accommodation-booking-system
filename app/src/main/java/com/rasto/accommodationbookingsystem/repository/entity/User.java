@@ -1,6 +1,7 @@
-package com.rasto.accommodationbookingsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.repository.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,12 +12,16 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(min = 1, max = 255)
     private String name;
 
+    @Size(min = 1, max = 255)
     private String surname;
 
+    @Size(min = 3, max = 255)
     private String email;
 
+    @Size(min = 6, max = 255)
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

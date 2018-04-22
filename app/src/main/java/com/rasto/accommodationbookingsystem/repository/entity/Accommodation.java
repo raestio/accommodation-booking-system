@@ -1,6 +1,8 @@
-package com.rasto.accommodationbookingsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.repository.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,14 +14,19 @@ public class Accommodation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(min = 1, max = 255)
     private String name;
 
+    @Min(0)
     private BigDecimal pricePerNight;
 
+    @Min(1)
     private Integer guests;
 
+    @Min(0)
     private Integer beds;
 
+    @Min(0)
     private Integer bathrooms;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

@@ -1,6 +1,6 @@
 package com.rasto.accommodationbookingsystem.web.ui;
 
-import com.rasto.accommodationbookingsystem.repository.entities.User;
+import com.rasto.accommodationbookingsystem.repository.entity.User;
 import com.rasto.accommodationbookingsystem.service.CustomerService;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
