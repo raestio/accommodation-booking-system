@@ -33,20 +33,21 @@ CREATE TABLE PHOTO (
   fk_accommodation_id BIGINT  REFERENCES ACCOMMODATION(id)  NOT NULL
 );
 
-CREATE TABLE CUSTOMER (
-  id      BIGSERIAL PRIMARY KEY NOT NULL,
-  name    TEXT                  NOT NULL,
-  surname TEXT                  NOT NULL,
-  email   TEXT   UNIQUE         NOT NULL
+CREATE TABLE USER_INFO (
+  id       BIGSERIAL PRIMARY KEY NOT NULL,
+  name     TEXT                  NOT NULL,
+  surname  TEXT                  NOT NULL,
+  email    TEXT      UNIQUE      NOT NULL,
+  password TEXT                  NOT NULL
 );
 
-CREATE TABLE RESERVATION (
+CREATE TABLE BOOKING (
   id                   BIGSERIAL PRIMARY KEY                  NOT NULL,
-  date_from            DATE                                   NOT NULL,
-  date_to              DATE                                   NOT NULL,
+  from_date            DATE                                   NOT NULL,
+  due_date             DATE                                   NOT NULL,
   fk_accommodation_id  BIGINT   REFERENCES ACCOMMODATION(id)  NOT NULL,
-  fk_customer_id       BIGINT   REFERENCES CUSTOMER(id)       NOT NULL,
-  UNIQUE (date_from, date_to, fk_accommodation_id)
+  fk_user_id           BIGINT   REFERENCES USER_INFO(id)      NOT NULL,
+  UNIQUE (from_date, due_date, fk_accommodation_id)
 );
 
 

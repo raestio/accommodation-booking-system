@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.rasto</groupId>
-	<artifactId>accommodation-reservation-system</artifactId>
+	<artifactId>accommodation-booking-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>accommodation-reservation-system</name>
-	<description>Simple accommodation reservation system</description>
+	<name>accommodation-booking-system</name>
+	<description>Simple accommodation booking system</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

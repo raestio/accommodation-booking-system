@@ -9,3 +9,4 @@ INSERT INTO accommodation_type (name)
       ('FARM_STAY'),
       ('VILLA'),
       ('LIGHTHOUSE');
+

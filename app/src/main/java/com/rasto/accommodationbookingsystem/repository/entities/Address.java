@@ -1,4 +1,4 @@
-package com.rasto.accommodationreservationsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.repository.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

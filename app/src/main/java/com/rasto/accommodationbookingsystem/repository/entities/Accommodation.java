@@ -1,4 +1,4 @@
-package com.rasto.accommodationreservationsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.repository.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,7 +34,7 @@ public class Accommodation implements Serializable {
     private List<Photo> photos;
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
-    private List<Reservation> reservations;
+    private List<Booking> bookings;
 
     public Long getId() {
         return id;
@@ -104,11 +104,11 @@ public class Accommodation implements Serializable {
         this.photos = photos;
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

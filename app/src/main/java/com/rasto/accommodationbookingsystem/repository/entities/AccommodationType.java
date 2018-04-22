@@ -1,6 +1,6 @@
-package com.rasto.accommodationreservationsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.repository.entities;
 
-import com.rasto.accommodationreservationsystem.repository.AccommodationTypeEnum;
+import com.rasto.accommodationbookingsystem.repository.AccommodationTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;

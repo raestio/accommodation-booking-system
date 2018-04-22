@@ -1,11 +1,11 @@
-package com.rasto.accommodationreservationsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.repository.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity
-public class Customer implements Serializable {
+@Entity(name = "UserInfo")
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +17,10 @@ public class Customer implements Serializable {
 
     private String email;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Reservation> reservations;
+    private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 
     public Long getId() {
         return id;
@@ -48,11 +50,19 @@ public class Customer implements Serializable {
         this.email = email;
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

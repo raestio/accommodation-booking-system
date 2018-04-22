@@ -1,4 +1,4 @@
-package com.rasto.accommodationreservationsystem.repository;
+package com.rasto.accommodationbookingsystem.repository;
 
 public enum AccommodationTypeEnum {
     APARTMENT("Apartment"),
