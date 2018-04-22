@@ -2,6 +2,7 @@ package com.rasto.accommodationbookingsystem.repository.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,20 +15,22 @@ public class Accommodation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Size(min = 1, max = 255)
     private String name;
 
+    @NotNull
     @Min(0)
     private BigDecimal pricePerNight;
 
     @Min(1)
-    private Integer guests;
+    private int guests;
 
     @Min(0)
-    private Integer beds;
+    private int beds;
 
     @Min(0)
-    private Integer bathrooms;
+    private int bathrooms;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "fk_accommodation_type_id")
@@ -63,27 +66,27 @@ public class Accommodation implements Serializable {
         this.pricePerNight = pricePerNight;
     }
 
-    public Integer getGuests() {
+    public int getGuests() {
         return guests;
     }
 
-    public void setGuests(Integer guests) {
+    public void setGuests(int guests) {
         this.guests = guests;
     }
 
-    public Integer getBeds() {
+    public int getBeds() {
         return beds;
     }
 
-    public void setBeds(Integer beds) {
+    public void setBeds(int beds) {
         this.beds = beds;
     }
 
-    public Integer getBathrooms() {
+    public int getBathrooms() {
         return bathrooms;
     }
 
-    public void setBathrooms(Integer bathrooms) {
+    public void setBathrooms(int bathrooms) {
         this.bathrooms = bathrooms;
     }
 

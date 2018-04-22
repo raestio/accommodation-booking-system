@@ -3,6 +3,7 @@ package com.rasto.accommodationbookingsystem.repository.entity;
 import com.rasto.accommodationbookingsystem.repository.AccommodationTypeEnum;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class AccommodationType implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private AccommodationTypeEnum name;
 

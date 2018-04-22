@@ -38,7 +38,8 @@ CREATE TABLE USER_INFO (
   name     TEXT                  NOT NULL,
   surname  TEXT                  NOT NULL,
   email    TEXT      UNIQUE      NOT NULL,
-  password TEXT                  NOT NULL
+  password TEXT                  NOT NULL,
+  role     TEXT                  NOT NULL
 );
 
 CREATE TABLE BOOKING (

@@ -1,22 +1,27 @@
 package com.rasto.accommodationbookingsystem.repository.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 public class Address implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Size(min = 1, max = 255)
     private String country;
 
+    @NotNull
     @Size(min = 1, max = 255)
     private String city;
 
+    @NotNull
     @Size(min = 1, max = 255)
     private String street;
 
