@@ -1,4 +1,5 @@
-package com.rasto.accommodationbookingsystem.repository.entity;
+package com.rasto.accommodationbookingsystem.backend.data.entity;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -36,16 +37,16 @@ public class Booking implements Serializable {
         return fromDate;
     }
 
-    public void setFromDate(LocalDate dateFrom) {
-        this.fromDate = dateFrom;
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
     }
 
     public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dateTo) {
-        this.dueDate = dateTo;
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
     public Accommodation getAccommodation() {

@@ -1,4 +1,4 @@
-package com.rasto.accommodationbookingsystem.repository;
+package com.rasto.accommodationbookingsystem.backend.data;
 
 public class Role {
     public static final String USER = "user";

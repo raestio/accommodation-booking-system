@@ -1,4 +1,4 @@
-package com.rasto.accommodationbookingsystem.repository.entity;
+package com.rasto.accommodationbookingsystem.backend.data.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -64,14 +64,6 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public List<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(List<Booking> bookings) {
-        this.bookings = bookings;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -86,5 +78,13 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

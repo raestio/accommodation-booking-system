@@ -1,4 +1,4 @@
-package com.rasto.accommodationbookingsystem.repository.entity;
+package com.rasto.accommodationbookingsystem.backend.data.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;

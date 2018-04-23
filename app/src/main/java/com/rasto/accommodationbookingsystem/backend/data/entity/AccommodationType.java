@@ -1,6 +1,6 @@
-package com.rasto.accommodationbookingsystem.repository.entity;
+package com.rasto.accommodationbookingsystem.backend.data.entity;
 
-import com.rasto.accommodationbookingsystem.repository.AccommodationTypeEnum;
+import com.rasto.accommodationbookingsystem.backend.data.AccommodationTypeEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

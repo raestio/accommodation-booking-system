@@ -1,7 +1,7 @@
-package com.rasto.accommodationbookingsystem.service;
+package com.rasto.accommodationbookingsystem.backend.service;
 
-import com.rasto.accommodationbookingsystem.repository.CustomerRepository;
-import com.rasto.accommodationbookingsystem.repository.entity.User;
+import com.rasto.accommodationbookingsystem.backend.data.entity.User;
+import com.rasto.accommodationbookingsystem.backend.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
