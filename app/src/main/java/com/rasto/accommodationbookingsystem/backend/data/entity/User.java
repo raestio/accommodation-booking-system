@@ -1,6 +1,7 @@
 package com.rasto.accommodationbookingsystem.backend.data.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -22,7 +23,8 @@ public class User implements Serializable {
     private String surname;
 
     @NotNull
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 255, message = "Email should be valid")
+    @Email
     private String email;
 
     @NotNull
