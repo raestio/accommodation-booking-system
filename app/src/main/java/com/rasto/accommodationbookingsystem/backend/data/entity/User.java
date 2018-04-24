@@ -1,5 +1,7 @@
 package com.rasto.accommodationbookingsystem.backend.data.entity;
 
+import com.rasto.accommodationbookingsystem.backend.data.Role;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -40,6 +42,7 @@ public class User implements Serializable {
     @PreUpdate
     private void prepareData(){
         this.email = email == null ? null : email.toLowerCase();
+        this.role = Role.USER;
     }
 
     public Long getId() {

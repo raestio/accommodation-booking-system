@@ -1,6 +1,7 @@
 package com.rasto.accommodationbookingsystem.backend.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.Serializable;
@@ -9,6 +10,7 @@ public interface CrudService<T extends Serializable> {
 
 	JpaRepository<T, Long> getRepository();
 
+	@Transactional
 	default T save(T entity) {
 		return getRepository().saveAndFlush(entity);
 	}
