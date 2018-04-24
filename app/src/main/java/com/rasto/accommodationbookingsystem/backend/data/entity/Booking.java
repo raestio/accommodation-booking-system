@@ -1,46 +1,52 @@
-package com.rasto.accommodationreservationsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.backend.data.entity;
+
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-public class Reservation implements Serializable {
+public class Booking implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate dateFrom;
+    @NotNull
+    private LocalDate fromDate;
 
-    private LocalDate dateTo;
+    @NotNull
+    private LocalDate dueDate;
 
+    @NotNull
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "fk_accommodation_id")
     private Accommodation accommodation;
 
+    @NotNull
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "fk_customer_id")
-    private Customer customer;
+    @JoinColumn(name = "fk_user_id")
+    private User user;
 
     public Long getId() {
         return id;
     }
 
-    public LocalDate getDateFrom() {
-        return dateFrom;
+    public LocalDate getFromDate() {
+        return fromDate;
     }
 
-    public void setDateFrom(LocalDate dateFrom) {
-        this.dateFrom = dateFrom;
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
     }
 
-    public LocalDate getDateTo() {
-        return dateTo;
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 
-    public void setDateTo(LocalDate dateTo) {
-        this.dateTo = dateTo;
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
     public Accommodation getAccommodation() {
@@ -51,11 +57,11 @@ public class Reservation implements Serializable {
         this.accommodation = accommodation;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

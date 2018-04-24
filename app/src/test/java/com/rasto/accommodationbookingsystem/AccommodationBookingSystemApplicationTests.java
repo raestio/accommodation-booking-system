@@ -1,4 +1,4 @@
-package com.rasto.accommodationreservationsystem;
+package com.rasto.accommodationbookingsystem;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AccommodationReservationSystemApplicationTests {
+public class AccommodationBookingSystemApplicationTests {
 
 	@Test
 	public void contextLoads() {

@@ -1,6 +1,9 @@
-package com.rasto.accommodationreservationsystem.repository.entities;
+package com.rasto.accommodationbookingsystem.backend.data.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,15 +15,22 @@ public class Accommodation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Size(min = 1, max = 255)
     private String name;
 
+    @NotNull
+    @Min(0)
     private BigDecimal pricePerNight;
 
-    private Integer guests;
+    @Min(1)
+    private int guests;
 
-    private Integer beds;
+    @Min(0)
+    private int beds;
 
-    private Integer bathrooms;
+    @Min(0)
+    private int bathrooms;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "fk_accommodation_type_id")
@@ -34,7 +44,7 @@ public class Accommodation implements Serializable {
     private List<Photo> photos;
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
-    private List<Reservation> reservations;
+    private List<Booking> bookings;
 
     public Long getId() {
         return id;
@@ -56,27 +66,27 @@ public class Accommodation implements Serializable {
         this.pricePerNight = pricePerNight;
     }
 
-    public Integer getGuests() {
+    public int getGuests() {
         return guests;
     }
 
-    public void setGuests(Integer guests) {
+    public void setGuests(int guests) {
         this.guests = guests;
     }
 
-    public Integer getBeds() {
+    public int getBeds() {
         return beds;
     }
 
-    public void setBeds(Integer beds) {
+    public void setBeds(int beds) {
         this.beds = beds;
     }
 
-    public Integer getBathrooms() {
+    public int getBathrooms() {
         return bathrooms;
     }
 
-    public void setBathrooms(Integer bathrooms) {
+    public void setBathrooms(int bathrooms) {
         this.bathrooms = bathrooms;
     }
 
@@ -104,11 +114,11 @@ public class Accommodation implements Serializable {
         this.photos = photos;
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }
