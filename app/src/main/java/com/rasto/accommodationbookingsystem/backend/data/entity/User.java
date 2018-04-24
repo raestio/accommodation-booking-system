@@ -1,9 +1,7 @@
 package com.rasto.accommodationbookingsystem.backend.data.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,16 +12,16 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotBlank
+    @Size(max = 255)
     private String name;
 
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotBlank
+    @Size(max = 255)
     private String surname;
 
-    @NotNull
-    @Size(min = 3, max = 255, message = "Email should be valid")
+    @NotEmpty
+    @Size(max = 255, message = "Email should be valid")
     @Email
     private String email;
 
@@ -31,12 +29,18 @@ public class User implements Serializable {
     @Size(min = 6, max = 255)
     private String password;
 
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotBlank
+    @Size(max = 255)
     private String role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Booking> bookings;
+
+    @PrePersist
+    @PreUpdate
+    private void prepareData(){
+        this.email = email == null ? null : email.toLowerCase();
+    }
 
     public Long getId() {
         return id;

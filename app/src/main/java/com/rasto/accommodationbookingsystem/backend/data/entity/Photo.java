@@ -2,6 +2,7 @@ package com.rasto.accommodationbookingsystem.backend.data.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -12,6 +13,7 @@ public class Photo implements Serializable {
     private Long id;
 
     @NotNull
+    @Size(max = 2048)
     private String filePath;
 
     @NotNull
