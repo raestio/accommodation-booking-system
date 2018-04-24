@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
+
 @Service
 public class UserService implements CrudService<User> {
 
@@ -23,11 +25,6 @@ public class UserService implements CrudService<User> {
 	}
 
 	@Override
-	public User save(User entity) {
-		return getRepository().saveAndFlush(entity);
-	}
-
-	@Override
 	@Transactional
 	public void delete(User userToDelete) {
 		CrudService.super.delete(userToDelete);
@@ -38,4 +35,12 @@ public class UserService implements CrudService<User> {
 		return new User();
 	}
 
+	/**
+	 * Find user by email
+	 * @param email
+	 * @return true if user exists, else false
+	 */
+	public boolean exists(@NotNull final String email) {
+		return getRepository().findByEmail(email.toLowerCase()).isPresent();
+	}
 }
