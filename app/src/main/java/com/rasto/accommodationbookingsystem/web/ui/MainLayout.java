@@ -6,7 +6,6 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.page.Viewport;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @HtmlImport("frontend://styles/shared-styles.html")
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
-@Route("")
 @Theme(Lumo.class)
 public class MainLayout extends Div implements RouterLayout, PageConfigurator {
 
@@ -27,7 +25,6 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator {
         this.signUpDialog = signUpDialog;
         H2 title = new H2("Airbnb");
         title.addClassName("main-layout__title");
-
 
         Div buttons = new Div(createSignUpButton(), createLoginButton());
         buttons.addClassName("main-layout__nav");

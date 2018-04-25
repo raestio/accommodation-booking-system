@@ -45,7 +45,7 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
         binder.forField(passwordField).withValidator(pass -> pass.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$"), "Need 6 or more chars, mixing digits, lowercase and uppercase letters")
                 .bind(user -> passwordField.getEmptyValue(), (user, pass) -> {
                     if (!passwordField.getEmptyValue().equals(pass)) {
-                        user.setPassword(pass);
+                        user.setPassword(pass); //TODO hash password
                     }
                 });
 
