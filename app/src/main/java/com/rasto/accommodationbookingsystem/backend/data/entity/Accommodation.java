@@ -40,7 +40,7 @@ public class Accommodation implements Serializable {
     @JoinColumn(name = "fk_address_id")
     private Address address;
 
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private List<Photo> photos;
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
