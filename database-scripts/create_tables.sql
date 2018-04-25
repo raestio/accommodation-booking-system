@@ -29,7 +29,7 @@ CREATE TABLE ACCOMMODATION (
 
 CREATE TABLE PHOTO (
   id                  BIGSERIAL  PRIMARY KEY                NOT NULL,
-  file_path           TEXT    UNIQUE                        NOT NULL,
+  url                 TEXT    UNIQUE                        NOT NULL,
   fk_accommodation_id BIGINT  REFERENCES ACCOMMODATION(id)  NOT NULL
 );
 

@@ -1,5 +1,7 @@
 package com.rasto.accommodationbookingsystem.backend.data.entity;
 
+import org.hibernate.validator.constraints.URL;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,8 +15,9 @@ public class Photo implements Serializable {
     private Long id;
 
     @NotNull
+    @URL
     @Size(max = 2048)
-    private String filePath;
+    private String url;
 
     @NotNull
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -25,12 +28,12 @@ public class Photo implements Serializable {
         return id;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getUrl() {
+        return url;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Accommodation getAccommodation() {
