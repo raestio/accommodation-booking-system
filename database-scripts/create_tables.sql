@@ -44,11 +44,11 @@ CREATE TABLE USER_INFO (
 
 CREATE TABLE BOOKING (
   id                   BIGSERIAL PRIMARY KEY                  NOT NULL,
-  from_date            DATE                                   NOT NULL,
-  due_date             DATE                                   NOT NULL,
+  check_in             DATE                                   NOT NULL,
+  check_out            DATE                                   NOT NULL,
   fk_accommodation_id  BIGINT   REFERENCES ACCOMMODATION(id)  NOT NULL,
   fk_user_id           BIGINT   REFERENCES USER_INFO(id)      NOT NULL,
-  UNIQUE (from_date, due_date, fk_accommodation_id)
+  UNIQUE (check_in, check_out, fk_accommodation_id)
 );
 
 

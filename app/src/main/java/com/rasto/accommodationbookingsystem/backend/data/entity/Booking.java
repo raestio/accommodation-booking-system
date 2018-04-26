@@ -14,10 +14,10 @@ public class Booking implements Serializable {
     private Long id;
 
     @NotNull
-    private LocalDate fromDate;
+    private LocalDate checkIn;
 
     @NotNull
-    private LocalDate dueDate;
+    private LocalDate checkOut;
 
     @NotNull
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -33,20 +33,20 @@ public class Booking implements Serializable {
         return id;
     }
 
-    public LocalDate getFromDate() {
-        return fromDate;
+    public LocalDate getCheckIn() {
+        return checkIn;
     }
 
-    public void setFromDate(LocalDate fromDate) {
-        this.fromDate = fromDate;
+    public void setCheckIn(LocalDate checkIn) {
+        this.checkIn = checkIn;
     }
 
-    public LocalDate getDueDate() {
-        return dueDate;
+    public LocalDate getCheckOut() {
+        return checkOut;
     }
 
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
+    public void setCheckOut(LocalDate checkOut) {
+        this.checkOut = checkOut;
     }
 
     public Accommodation getAccommodation() {
