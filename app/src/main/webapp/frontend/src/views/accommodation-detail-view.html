@@ -1,0 +1,49 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/range-datepicker/range-datepicker.html">
+<link rel="import" href="../../bower_components/range-datepicker/range-datepicker-input.html">
+
+<!-- Defines the reviews-list element -->
+<dom-module id="accommodation-detail">
+    <template>
+        <style include="view-styles">
+        </style>
+
+        <vaadin-form-layout id="form" columns="1">
+            <h3 id="price">5,725 CZK</h3>
+            <br>
+            <div>
+
+
+                <dom-bind>
+                    <template>
+                        <range-datepicker-input date-format="MM/DD/YYYY">
+                            <template>
+                                <div class="layout horizontal center">
+                                    <paper-input label="Check In" value="[[dateFrom]]" readonly></paper-input>
+                                    <paper-input label="Check Out" value="[[dateTo]]" readonly></paper-input>
+                                </div>
+                            </template>
+                        </range-datepicker-input>
+                    </template>
+                </dom-bind>
+
+            </div>
+            <br>
+            <vaadin-button>Book</vaadin-button>
+        </vaadin-form-layout>
+    </template>
+
+    <script>
+        class AccommodationDetail extends Polymer.Element {
+            static get is() {
+                return 'accommodation-detail'
+            }
+
+        }
+        customElements.define(AccommodationDetail.is, AccommodationDetail);
+    </script>
+
+</dom-module>
