@@ -1,0 +1,61 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/vaadin-icons/vaadin-icons.html">
+<link rel="import" href="../../bower_components/vaadin-button/src/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-checkbox/src/vaadin-checkbox.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/src/vaadin-text-field.html">
+
+<link rel="import" href="../../styles/shared-styles.html">
+
+<dom-module id="accommodation-card">
+    <template>
+        <style include="shared-styles">
+
+            .accommodation-card {
+                margin: 5px;
+                max-width: 30em;
+                max-height: 25em;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+                overflow: hidden;
+                border-radius: 10px;
+            }
+
+            .accommodation-card:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            }
+
+            .accommodation-card-image {
+                width: 100%;
+                height: 15vw;
+                object-fit: cover;
+            }
+
+            .accommodation-card-container {
+                padding: 3px 10px;
+            }
+
+        </style>
+
+        <div class="accommodation-card">
+            <img id="photo" class="accommodation-card-image">
+            </img>
+            <div class="accommodation-card-container">
+                <label id="name"></label>
+                <br>
+                <label id="pricePerNight"></label>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        class AccommodationCard extends Polymer.Element {
+            static get is() {
+                return 'accommodation-card';
+            }
+        }
+
+        window.customElements.define(AccommodationCard.is, AccommodationCard);
+    </script>
+
+</dom-module>
