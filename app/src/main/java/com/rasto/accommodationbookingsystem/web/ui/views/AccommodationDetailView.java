@@ -14,10 +14,15 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Route(value = "accommodations", layout = MainLayout.class)
 @Tag("accommodation-detail")
 @HtmlImport("src/views/accommodation-detail-view.html")
 public class AccommodationDetailView extends PolymerTemplate<AccommodationDetailView.Model> implements HasUrlParameter<Long>, HasLogger {
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     public interface Model extends TemplateModel {
         String getDateFrom();
@@ -30,12 +35,9 @@ public class AccommodationDetailView extends PolymerTemplate<AccommodationDetail
     private Button bookButton;
 
     public AccommodationDetailView() {
-        bookButton.addClickListener(new ComponentEventListener<HasClickListeners.ClickEvent<Button>>() {
-            @Override
-            public void onComponentEvent(HasClickListeners.ClickEvent<Button> event) {
-                getLogger().info(getCheckInDate());
-                getLogger().info(getCheckOutDate());
-            }
+        bookButton.addClickListener((ComponentEventListener<HasClickListeners.ClickEvent<Button>>) event -> {
+            getLogger().info(getCheckInDate().toString());
+            getLogger().info(getCheckOutDate().toString());
         });
     }
 
@@ -44,11 +46,11 @@ public class AccommodationDetailView extends PolymerTemplate<AccommodationDetail
         accommodationId = parameter;
     }
 
-    public String getCheckInDate() {
-        return getModel().getDateFrom();
+    public LocalDate getCheckInDate() {
+        return LocalDate.parse(getModel().getDateFrom(), formatter);
     }
 
-    public String getCheckOutDate() {
-        return getModel().getDateTo();
+    public LocalDate getCheckOutDate() {
+        return LocalDate.parse(getModel().getDateTo(), formatter);
     }
 }
