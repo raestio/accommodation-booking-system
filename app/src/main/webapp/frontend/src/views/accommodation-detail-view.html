@@ -5,26 +5,15 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/range-datepicker/range-datepicker.html">
 <link rel="import" href="../../bower_components/range-datepicker/range-datepicker-input.html">
+<link rel="import" href="../components/booking-form.html">
 
 <dom-module id="accommodation-detail">
     <template>
         <style include="view-styles">
         </style>
 
-        <vaadin-form-layout id="form" columns="1">
-            <h3 id="price">5,725 CZK</h3>
-            <br>
-                <range-datepicker-input date-format="DD.MM.YYYY">
-                    <template>
-                        <div class="layout horizontal center">
-                            <paper-input label="Check In" value="{{dateFrom}}"></paper-input>
-                            <paper-input label="Check Out" value="{{dateTo}}"></paper-input>
-                        </div>
-                    </template>
-                </range-datepicker-input>
-            <br>
-            <vaadin-button id="book">Book</vaadin-button>
-        </vaadin-form-layout>
+        <booking-form id="bookingForm"></booking-form>
+
     </template>
 
     <script>
