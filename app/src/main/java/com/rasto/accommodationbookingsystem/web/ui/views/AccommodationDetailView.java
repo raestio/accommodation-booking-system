@@ -5,9 +5,13 @@ import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.BookingForm;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.router.BeforeEvent;
@@ -16,7 +20,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Route(value = "accommodations", layout = MainLayout.class)
@@ -41,20 +44,34 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
     @Id("baths")
     private Span baths;
 
+    @Id("images")
+    private HorizontalLayout images;
+
     @Id("bookingForm")
     private BookingForm bookingForm;
+
+
+
+
+    @Id("photoModal")
+    private Div photoModal;
+
+    @Id("photoModalClose")
+    private Span photoModalClose;
+
+    @Id("photoModalImg")
+    private Image photoModalImg;
 
     private AccommodationService accommodationService;
 
     @Autowired
     public AccommodationDetailView(AccommodationService accommodationService) {
         this.accommodationService = accommodationService;
-        bookingForm.setOnCheckOutDateChangeListener(new BookingForm.OnCheckOutDateChangeListener() {
-            @Override
-            public void onChange(LocalDate checkIn, LocalDate checkOut) {
+        bookingForm.setOnCheckOutDateChangeListener((checkIn, checkOut) -> {
 
-            }
         });
+        photoModal.setVisible(false);
+        photoModalClose.addClickListener(e -> photoModal.setVisible(false));
     }
 
     @Override
@@ -76,7 +93,21 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
         guests.setText(accommodation.getGuests() + " " + (accommodation.getGuests() == 1 ? "guest" : "guests"));
         beds.setText(accommodation.getBathrooms() + " " + (accommodation.getBathrooms() == 1 ? "bed" : "beds"));
         baths.setText(accommodation.getBathrooms() + " " + (accommodation.getBathrooms() == 1 ? "bath" : "baths"));
+
+        images.add(createImage(accommodation.getPhotos().get(0).getUrl()));
+
         bookingForm.setPrice(accommodation.getPricePerNight());
+    }
+
+    private Image createImage(String url) {
+        Image image = new Image();
+        image.setSrc(url);
+        image.setClassName("photo");
+        image.addListener(ClickEvent.class, event -> {
+            photoModal.setVisible(true);
+            photoModalImg.setSrc(((Image) event.getSource()).getSrc());
+        });
+        return image;
     }
 
 }

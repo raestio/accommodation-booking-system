@@ -20,9 +20,6 @@
 <dom-module id="view-styles">
     <template>
         <style>
-            /* Stretch to fill the entire browser viewport while keeping the content constrained to
-            parent element max-width */
-
             .view-toolbar {
                 display: flex;
                 background-color: var(--lumo-base-color);
@@ -39,11 +36,13 @@
                 min-width: 0;
                 margin-right: 16px;
             }
+
             .view-container {
                 margin: 0 calc(-50vw + 50%);
                 padding: 0 calc(50vw - 50% + 16px);
                 flex: auto;
             }
+
         </style>
     </template>
 </dom-module>
