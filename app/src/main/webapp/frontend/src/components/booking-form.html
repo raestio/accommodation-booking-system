@@ -12,7 +12,7 @@
 
             .booking_form {
                 width: 20em;
-                height: 20em;
+                height: 22em;
                 padding-left: 24px !important;
                 padding-right: 24px !important;
                 margin: 0px !important;
@@ -30,23 +30,8 @@
                 border-radius: 4px !important;
                 width: 100% !important;
                 border-width: 2px !important;
-                margin-top: 2em;
-                background: #FF5A5F !important;
+                margin-top: 1em;
                 border-color: transparent !important;
-            }
-
-            .book_button_text {
-                -webkit-transition: color 0.2s !important;
-                -moz-transition: color 0.2s !important;
-                transition: color 0.2s !important;
-                font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif !important;
-                font-size: 19px !important;
-                line-height: 22px !important;
-                letter-spacing: undefined !important;
-                padding-top: 0px !important;
-                padding-bottom: 0px !important;
-                align-content: center;
-                color: #ffffff !important;
             }
             .price {
                 margin: 0px !important;
@@ -62,6 +47,24 @@
                 display: inline !important;
             }
 
+            .total {
+                display: table !important;
+                width: 100% !important;
+                color: #484848;
+                font-size: 20px !important;
+                margin-top: 1em;
+            }
+
+            .total_text {
+                display: table-cell !important;
+                width: 50%;
+                vertical-align: middle !important;
+            }
+
+            .total_price {
+                display: table-cell !important;
+                vertical-align: middle !important;
+            }
         </style>
 
         <vaadin-form-layout id="form" class="booking_form">
@@ -70,7 +73,7 @@
 
                 <div>
                     <span class="price">
-                        <span>1&nbsp;447 CZK</span>
+                        <span id="priceSpan"></span>
                     </span>
                         <span>per night</span>
                 </div>
@@ -82,14 +85,19 @@
                 <range-datepicker-input date-format="DD.MM.YYYY">
                     <template>
                         <div class="layout vertical">
-                            <paper-input label="Check In" value="{{dateFrom}}" on-input="alert(this.value)"></paper-input>
-                            <paper-input label="Check Out" value="{{dateTo}}" on-input="alert(this.value)"></paper-input>
+                            <paper-input label="Check In" value="{{dateFrom}}"></paper-input>
+                            <paper-input label="Check Out" value="{{dateTo}}"></paper-input>
                         </div>
                     </template>
                 </range-datepicker-input>
 
+                <div class="total">
+                    <div class="total_text"><span id="totalTextSpan">Total</span></div>
+                    <div class="total_price"><span id="totalPriceSpan"></span></div>
+                </div>
+
                 <vaadin-button id="book" class="book_button">
-                    <span class="book_button_text">Book</span>
+                    <span>Book</span>
                 </vaadin-button>
 
             </div>

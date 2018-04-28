@@ -12,6 +12,8 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
+import java.time.LocalDate;
+
 @Route(value = "accommodations", layout = MainLayout.class)
 @Tag("accommodation-detail")
 @HtmlImport("src/views/accommodation-detail-view.html")
@@ -23,6 +25,12 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
     private BookingForm bookingForm;
 
     public AccommodationDetailView() {
+        bookingForm.setOnCheckOutDateChangeListener(new BookingForm.OnCheckOutDateChangeListener() {
+            @Override
+            public void onChange(LocalDate checkIn, LocalDate checkOut) {
+                
+            }
+        });
     }
 
     @Override
