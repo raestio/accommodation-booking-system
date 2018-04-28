@@ -5,12 +5,58 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/range-datepicker/range-datepicker.html">
 <link rel="import" href="../../bower_components/range-datepicker/range-datepicker-input.html">
+<link rel="import" href="../../bower_components/vaadin-ordered-layout/vaadin-horizontal-layout.html">
+<link rel="import" href="../../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../components/booking-form.html">
 
 <dom-module id="accommodation-detail">
     <template>
         <style include="view-styles">
+
+            .accommodation_div {
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .accommodation_name {
+                font-size: 52px;
+                color: #484848;
+                font-weight: 700;
+            }
+
+            .accommodation_address {
+                font-size: 26px;
+                color: #484848;
+                font-weight: 400;
+            }
+
         </style>
+
+        <div class="accommodation_div">
+            <span id="accommodationName" class="accommodation_name"></span>
+        </div>
+
+        <div class="accommodation_div">
+            <span id="accommodationAddress" class="accommodation_address"></span>
+        </div>
+
+        <vaadin-horizontal-layout class="accommodation_div" theme="spacing-xl" style="margin-top: 1em">
+            <div>
+                <iron-icon icon="vaadin:group"></iron-icon>
+                <span id="guests"></span>
+            </div>
+            <div>
+                <iron-icon icon="vaadin:bed"></iron-icon>
+                <span id="beds"></span>
+            </div>
+            <div>
+                <iron-icon icon="vaadin:lifebuoy"></iron-icon>
+                <span id="baths"></span>
+            </div>
+        </vaadin-horizontal-layout>
+
+
 
         <booking-form id="bookingForm"></booking-form>
 

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +32,10 @@ public class AccommodationService implements CrudService<Accommodation> {
     public List<AccommodationCardDTO> findAllAccommodationsCards() {
         List<Accommodation> accommodations = accommodationRepository.findAll();
         return accommodations.stream().map(AccommodationCardDTO::create).collect(Collectors.toList());
+    }
+
+    public Optional<Accommodation> findById(Long id) {
+         return accommodationRepository.findById(id);
     }
 
     @Override
