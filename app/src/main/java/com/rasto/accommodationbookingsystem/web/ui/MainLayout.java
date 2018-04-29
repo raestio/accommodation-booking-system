@@ -27,6 +27,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
 
     private Button signUp;
     private Button login;
+    private Button bookings;
     private Button logout;
 
     @Autowired
@@ -40,8 +41,9 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
         signUp = createSignUpButton();
         login = createLoginButton();
         logout = createLogoutButton();
+        bookings = createBookingsButton();
 
-        Div buttons = new Div(signUp, login, logout);
+        Div buttons = new Div(signUp, login, bookings, logout);
         buttons.addClassName("main-layout__nav");
         Div header = new Div(title, buttons);
         header.addClassName("main-layout__header");
@@ -76,6 +78,14 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
         return logout;
     }
 
+    private Button createBookingsButton() {
+        bookings = new Button();
+        bookings.setText("Bookings");
+        bookings.setClassName("main-layout__nav-item");
+        bookings.setVisible(false);
+        return bookings;
+    }
+
     private void logout() {
         getUI().ifPresent(ui -> {
             SecurityContextHolder.clearContext();
@@ -105,7 +115,9 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
             login.setVisible(false);
             signUp.setVisible(false);
             logout.setVisible(true);
+            bookings.setVisible(true);
         } else {
+            bookings.setVisible(false);
             login.setVisible(true);
             signUp.setVisible(true);
             logout.setVisible(false);
