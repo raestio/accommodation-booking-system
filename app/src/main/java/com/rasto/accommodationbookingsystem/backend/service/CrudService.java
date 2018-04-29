@@ -10,11 +10,11 @@ public interface CrudService<T extends Serializable> {
 
 	List<T> findAll();
 
-	Optional<T> findById(long id);
+	Optional<T> findById(Long id);
 
 	T saveOrUpdate(T entity);
 
-	void delete(long id);
+	void delete(Long id);
 
 	void delete(T entity);
 }

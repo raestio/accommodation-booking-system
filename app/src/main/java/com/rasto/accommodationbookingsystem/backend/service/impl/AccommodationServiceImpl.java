@@ -39,7 +39,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
-    public Optional<Accommodation> findById(long id) {
+    public Optional<Accommodation> findById(Long id) {
         return accommodationRepository.findById(id);
     }
 
@@ -50,7 +50,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     @Transactional
-    public void delete(long id) {
+    public void delete(Long id) {
         accommodationRepository.deleteById(id);
     }
 
