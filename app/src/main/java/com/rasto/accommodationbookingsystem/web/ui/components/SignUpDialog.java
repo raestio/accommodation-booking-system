@@ -12,6 +12,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -26,11 +27,13 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
 
     private final Binder<User> binder = new Binder<>(User.class);
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SignUpDialog(UserService userService) {
+    public SignUpDialog(UserService userService, PasswordEncoder passwordEncoder) {
         super();
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
         initUIComponents();
         bindUser();
     }
@@ -46,7 +49,7 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
         binder.forField(passwordField).withValidator(pass -> pass.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$"), "Need 6 or more chars, mixing digits, lowercase and uppercase letters")
                 .bind(user -> passwordField.getEmptyValue(), (user, pass) -> {
                     if (!passwordField.getEmptyValue().equals(pass)) {
-                        user.setPassword(pass); //TODO hash password
+                        user.setPassword(passwordEncoder.encode(pass));
                     }
                 });
 
