@@ -96,7 +96,7 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
 
     private void signUp() {
         User user = binder.getBean();
-        userService.save(user);
+        userService.saveOrUpdate(user);
         onClose();
     }
 
