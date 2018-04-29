@@ -52,7 +52,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator {
     }
 
     private void login() {
-
+        getUI().ifPresent(ui -> ui.navigate("login"));
     }
 
     private void signUp() {
