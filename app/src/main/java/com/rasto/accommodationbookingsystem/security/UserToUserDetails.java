@@ -19,7 +19,8 @@ public class UserToUserDetails implements Converter<User, UserDetails> {
         if (source != null) {
             userDetails.setEmail(source.getEmail());
             userDetails.setPassword(source.getPassword());
-
+            userDetails.setName(source.getName());
+            userDetails.setId(source.getId());
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(source.getRole()));
             userDetails.setAuthorities(authorities);

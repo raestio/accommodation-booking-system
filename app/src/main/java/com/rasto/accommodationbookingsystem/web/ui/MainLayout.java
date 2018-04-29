@@ -1,11 +1,14 @@
 package com.rasto.accommodationbookingsystem.web.ui;
 
+import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.components.SignUpDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.page.Viewport;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
@@ -16,19 +19,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 @HtmlImport("frontend://styles/shared-styles.html")
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
 @Theme(Lumo.class)
-public class MainLayout extends Div implements RouterLayout, PageConfigurator {
+public class MainLayout extends Div implements RouterLayout, PageConfigurator, BeforeEnterObserver {
 
     private final SignUpDialog signUpDialog;
+    private final UserAuthenticationState userAuthenticationState;
+
+    private Div buttons;
 
     @Autowired
-    public MainLayout(SignUpDialog signUpDialog){
+    public MainLayout(SignUpDialog signUpDialog, UserAuthenticationState userAuthenticationState){
         this.signUpDialog = signUpDialog;
+        this.userAuthenticationState = userAuthenticationState;
         H2 title = new H2("Airbnb");
         title.addClassName("main-layout__title");
 
-        Div buttons = new Div(createSignUpButton(), createLoginButton());
+        buttons = new Div(createSignUpButton(), createLoginButton());
         buttons.addClassName("main-layout__nav");
-
+        buttons.setVisible(false);
         Div header = new Div(title, buttons);
         header.addClassName("main-layout__header");
         add(header);
@@ -63,5 +70,14 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator {
     public void configurePage(InitialPageSettings initialPageSettings) {
         initialPageSettings.addMetaTag("apple-mobile-web-app-capable", "yes");
         initialPageSettings.addMetaTag("apple-mobile-web-app-status-bar-style", "black");
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if (userAuthenticationState.isAuthenticated()) {
+            buttons.setVisible(false);
+        } else {
+            buttons.setVisible(true);
+        }
     }
 }
