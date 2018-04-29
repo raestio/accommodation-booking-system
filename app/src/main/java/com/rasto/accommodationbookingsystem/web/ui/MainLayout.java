@@ -15,6 +15,7 @@ import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @HtmlImport("frontend://styles/shared-styles.html")
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
@@ -24,7 +25,9 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     private final SignUpDialog signUpDialog;
     private final UserAuthenticationState userAuthenticationState;
 
-    private Div buttons;
+    private Button signUp;
+    private Button login;
+    private Button logout;
 
     @Autowired
     public MainLayout(SignUpDialog signUpDialog, UserAuthenticationState userAuthenticationState){
@@ -33,9 +36,13 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
         H2 title = new H2("Airbnb");
         title.addClassName("main-layout__title");
 
-        buttons = new Div(createSignUpButton(), createLoginButton());
+
+        signUp = createSignUpButton();
+        login = createLoginButton();
+        logout = createLogoutButton();
+
+        Div buttons = new Div(signUp, login, logout);
         buttons.addClassName("main-layout__nav");
-        buttons.setVisible(false);
         Div header = new Div(title, buttons);
         header.addClassName("main-layout__header");
         add(header);
@@ -43,19 +50,39 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     }
 
     private Button createSignUpButton() {
-        Button signUp = new Button();
+        signUp = new Button();
         signUp.setText("Sign Up");
         signUp.setClassName("main-layout__nav-item");
+        signUp.setVisible(false);
         signUp.addClickListener(e -> signUp());
         return signUp;
     }
 
     private Button createLoginButton() {
-        Button login = new Button();
+        login = new Button();
         login.setText("Login");
         login.setClassName("main-layout__nav-item");
+        login.setVisible(false);
         login.addClickListener(e -> login());
         return login;
+    }
+
+    private Button createLogoutButton() {
+        logout = new Button();
+        logout.setText("Logout");
+        logout.setClassName("main-layout__nav-item");
+        logout.setVisible(false);
+        logout.addClickListener(e -> logout());
+        return logout;
+    }
+
+    private void logout() {
+        getUI().ifPresent(ui -> {
+            SecurityContextHolder.clearContext();
+            ui.getSession().close();
+            ui.navigate("");
+            ui.getPage().reload();
+        });
     }
 
     private void login() {
@@ -75,9 +102,13 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (userAuthenticationState.isAuthenticated()) {
-            buttons.setVisible(false);
+            login.setVisible(false);
+            signUp.setVisible(false);
+            logout.setVisible(true);
         } else {
-            buttons.setVisible(true);
+            login.setVisible(true);
+            signUp.setVisible(true);
+            logout.setVisible(false);
         }
     }
 }
