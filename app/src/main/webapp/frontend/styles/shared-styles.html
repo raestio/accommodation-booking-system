@@ -1,19 +1,3 @@
-<!--
-  ~ Copyright 2000-2017 Vaadin Ltd.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not
-  ~ use this file except in compliance with the License. You may obtain a copy of
-  ~ the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-  ~ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-  ~ License for the specific language governing permissions and limitations under
-  ~ the License.
-  -->
-
 <link rel="import" href="../bower_components/vaadin-lumo-styles/color.html">
 <link rel="import" href="../bower_components/vaadin-lumo-styles/typography.html">
 
@@ -43,6 +27,98 @@
                 flex: auto;
             }
 
+            .accommodation_div {
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .accommodation_name {
+                font-size: 52px;
+                color: #484848;
+                font-weight: 700;
+            }
+
+            .accommodation_address {
+                font-size: 26px;
+                color: #484848;
+                font-weight: 400;
+            }
+
+            .photo {
+                width:20em;
+                height:12em;
+                margin: 10px;
+                object-fit: cover;
+                cursor: pointer;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+            }
+
+            .photo:hover {
+                opacity: 0.7;
+            }
+
+            .photo-modal {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgb(0,0,0);
+                background-color: rgba(0,0,0,0.9);
+            }
+
+            .photo-modal-content {
+                display: block;
+                position: absolute;
+                margin: auto;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                max-width: 50%;
+                -webkit-animation-name: zoom;
+                -webkit-animation-duration: 0.6s;
+                animation-name: zoom;
+                animation-duration: 0.6s;
+            }
+
+            @-webkit-keyframes zoom {
+                from {-webkit-transform:scale(0)}
+                to {-webkit-transform:scale(1)}
+            }
+
+            @keyframes zoom {
+                from {transform:scale(0)}
+                to {transform:scale(1)}
+            }
+
+            /* The Close Button */
+            .photo-modal-close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #f1f1f1;
+                font-size: 40px;
+                font-weight: bold;
+                transition: 0.3s;
+            }
+
+            .photo-modal-close:hover,
+            .photo-modal-close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            @media only screen and (max-width: 700px){
+                .photo-modal-content {
+                    width: 100%;
+                }
+            }
+
         </style>
     </template>
 </dom-module>
@@ -62,7 +138,6 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 1920px;
             margin: 0 auto;
             min-height: 100vh;
         }

@@ -1,0 +1,28 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-ordered-layout/vaadin-vertical-layout.html">
+<link rel="import" href="../../styles/shared-styles.html">
+
+<dom-module id="board-layout">
+    <template>
+        <style include="view-styles">
+            .board {
+                margin-top: 1em;
+            }
+        </style>
+
+        <div class="board">
+            <vaadin-vertical-layout id="verticalLayout"></vaadin-vertical-layout>
+        </div>
+    </template>
+
+    <script>
+        class BoardLayout extends Polymer.Element {
+            static get is() {
+                return 'board-layout';
+            }
+        }
+
+        window.customElements.define(BoardLayout.is, BoardLayout);
+    </script>
+
+</dom-module>

@@ -35,3 +35,47 @@ INSERT INTO photo (url, fk_accommodation_id)
            ('http://res.cloudinary.com/accommodation-booking-system/image/upload/v1524684603/test_c_2.webp', 3),
            ('http://res.cloudinary.com/accommodation-booking-system/image/upload/v1524684603/test_c_3.webp', 3),
            ('http://res.cloudinary.com/accommodation-booking-system/image/upload/v1524684603/test_c_4.webp', 3);
+
+
+
+
+
+
+
+
+
+INSERT INTO accommodation (name, price_per_night, guests, beds, bathrooms, fk_accommodation_type_id, fk_address_id)
+    VALUES ('Apartment with the best view', 4600, 10, 3, 5, 1, 1);
+
+INSERT INTO photo (url, fk_accommodation_id)
+    VALUES ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524681771/test_a_3.webp', 4),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524681771/test_a_2.webp', 4),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524681770/test_a_1.webp', 4),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524681771/test_a_4.webp', 4),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524681771/test_a_5.webp', 4);
+
+INSERT INTO address (city, country, street)
+    VALUES ('New York', 'USA', 'Wall Sreet 1');
+
+INSERT INTO accommodation (name, price_per_night, guests, beds, bathrooms, fk_accommodation_type_id, fk_address_id)
+    VALUES ('Luxury villa', 19145, 15, 10, 4, 8, 4);
+
+INSERT INTO photo (url, fk_accommodation_id)
+    VALUES ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524683179/test_b_3.webp', 5),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524683179/test_b_2.webp', 5),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524683179/test_b_1.webp', 5),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524683179/test_b_4.webp', 5);
+
+
+INSERT INTO address (city, country, street)
+    VALUES ('Barcelona', 'Spain', 'Street 3');
+
+INSERT INTO accommodation (name, price_per_night, guests, beds, bathrooms, fk_accommodation_type_id, fk_address_id)
+    VALUES ('Great beach apartment', 1655, 4, 3, 2, 1, 5);
+
+INSERT INTO photo (url, fk_accommodation_id)
+    VALUES ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524684603/test_c_4.webp', 6),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524684603/test_c_2.webp', 6),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524684603/test_c_3.webp', 6),
+           ('https://res.cloudinary.com/accommodation-booking-system/image/upload/v1524684603/test_c_1.webp', 6);
+

@@ -5,10 +5,14 @@ import com.rasto.accommodationbookingsystem.backend.service.AccommodationService
 import com.rasto.accommodationbookingsystem.dto.AccommodationCardDTO;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.AccommodationCard;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.rasto.accommodationbookingsystem.web.ui.components.BoardLayout;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -16,25 +20,26 @@ import java.util.stream.Collectors;
 
 @Route(value = "", layout = MainLayout.class)
 @RouteAlias(value = "accommodations", layout = MainLayout.class)
-public class AccommodationsView extends Div implements HasLogger {
+@Tag("accommodations-view")
+@HtmlImport("src/views/accommodations-view.html")
+public class AccommodationsView extends PolymerTemplate<TemplateModel> implements HasLogger {
 
-    private final int ACCOMMODATIONS_CARDS_PER_ROW = 3; //TODO create custom component
+    @Id("accommodationsBoardLayout")
+    private BoardLayout accommodationsBoardLayout;
 
-    private final HorizontalLayout accommodationsLayout = new HorizontalLayout();
     private final AccommodationService accommodationService;
 
     @Autowired
     public AccommodationsView(AccommodationService accommodationService) {
         this.accommodationService = accommodationService;
-        initAccommodationsLayout();
-        add(accommodationsLayout);
+        accommodationsBoardLayout.setComponentsCountInRow(3);
+        initAccommodationsCards();
     }
 
-    private void initAccommodationsLayout() {
+    private void initAccommodationsCards() {
         List<AccommodationCardDTO> accommodationCards = accommodationService.findAllAccommodationsCards();
         List<AccommodationCard> cardList = accommodationCards.stream().map(this::createAccommodationCard).collect(Collectors.toList());
-
-        accommodationsLayout.add(cardList.get(0), cardList.get(1), cardList.get(2));
+        cardList.forEach(card -> accommodationsBoardLayout.add(card));
     }
 
     private AccommodationCard createAccommodationCard(AccommodationCardDTO accommodationCardDTO) {
