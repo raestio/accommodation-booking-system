@@ -20,9 +20,9 @@ public interface BookingsService extends CrudService<Booking> {
 
     /**
      * Make booking
-     * @param booking
-     * @param accommodationId
-     * @param userId
+     * @param booking booking
+     * @param accommodationId accommodation id
+     * @param userId user id
      */
     void bookAccommodation(Booking booking, Long accommodationId, Long userId) throws UserNotAuthenticatedException;
 }
