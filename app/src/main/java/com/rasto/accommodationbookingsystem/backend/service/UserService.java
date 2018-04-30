@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface UserService extends CrudService<User> {
 
 	/**
-	 * Find user by email
+	 * Find user by email and return true if exists
 	 * @param email
 	 * @return true if user exists, else false
 	 */
