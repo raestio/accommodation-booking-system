@@ -81,7 +81,7 @@
                     <div class="delimiter"></div>
                 </div>
 
-                <range-datepicker-input date-format="DD.MM.YYYY">
+                <range-datepicker-input date-format="DD.MM.YYYY" disabled-days="[[disabledDays]]">
                     <template>
                         <div class="layout vertical">
                             <paper-input label="Check In" value="{{dateFrom}}"></paper-input>
@@ -89,6 +89,7 @@
                         </div>
                     </template>
                 </range-datepicker-input>
+
 
                 <div class="total">
                     <div class="total_text"><span id="totalTextSpan">Total</span></div>

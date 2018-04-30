@@ -10,10 +10,15 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.TemplateModel;
+import elemental.json.JsonArray;
+import elemental.json.JsonValue;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 
 @Tag("booking-form")
 @HtmlImport("src/components/booking-form.html")
@@ -23,6 +28,7 @@ public class BookingForm extends PolymerTemplate<BookingForm.Model> implements H
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private String currency;
+    private BigDecimal totalPrice;
 
     @Id("priceSpan")
     private Span priceSpan;
@@ -39,14 +45,11 @@ public class BookingForm extends PolymerTemplate<BookingForm.Model> implements H
     public interface Model extends TemplateModel {
         String getDateFrom();
         String getDateTo();
+        void setDateFrom(String dateFrom);
+        void setDateTo(String dateTo);
     }
 
     public BookingForm() {
-        /*JsonFactory jsonFactory = new JreJsonFactory();
-        jsonFactory.createArray();
-        jsonFactory.parse("[1524787200]");
-        JsonValue jsonValue = new JreJsonArray(jsonFactory);
-        getElement().setPropertyJson("disabledDays", jsonValue);*/ //TODO Disabled days
         bookButton.setEnabled(false);
         setTotalVisible(false);
         currency = CURRENCY_DEFAULT;
@@ -65,13 +68,17 @@ public class BookingForm extends PolymerTemplate<BookingForm.Model> implements H
 
     public void setOnCheckOutDateChangeListener(OnCheckOutDateChangeListener onCheckOutDateChangeListener) {
         getElement().addPropertyChangeListener("dateTo", event -> {
-            if (!event.getValue().toString().isEmpty()) {
-                getLogger().info(getCheckInDate().toString() + " " + getCheckOutDate().toString());
+            if (!event.getValue().toString().isEmpty() && !event.getValue().toString().equals(getModel().getDateFrom())) {
                 setTotalVisible(true);
                 bookButton.setEnabled(true);
+                onCheckOutDateChangeListener.onChange(getCheckInDate(), getCheckOutDate());
             } else {
                 setTotalVisible(false);
                 bookButton.setEnabled(false);
+            }
+
+            if (event.getValue().toString().equals(getModel().getDateFrom())) {
+                clearDatePicker();
             }
         });
     }
@@ -81,7 +88,12 @@ public class BookingForm extends PolymerTemplate<BookingForm.Model> implements H
     }
 
     public void setTotalPrice(BigDecimal price) {
+        totalPrice = price;
         totalPriceSpan.setText(price.toString() + " " + currency);
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
     }
 
     public void setPriceSpanText(String text) {
@@ -94,6 +106,27 @@ public class BookingForm extends PolymerTemplate<BookingForm.Model> implements H
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public void setDisabledDays(List<LocalDate> disabledDays) {
+        JsonValue jsonValue = elemental.json.Json.createArray();
+
+        int index = 0;
+        for (LocalDate localDate : disabledDays) {
+            ((JsonArray) jsonValue).set(index, String.valueOf(localDate.atStartOfDay(ZoneId.systemDefault()).toEpochSecond()));
+            index++;
+        }
+
+        getElement().setPropertyJson("disabledDays", jsonValue);
+    }
+
+    public void clearDatePicker() {
+        getModel().setDateFrom("");
+        getModel().setDateTo("");
+    }
+
+    public void disable() {
+        bookButton.setEnabled(false);
     }
 
     public LocalDate getCheckInDate() {

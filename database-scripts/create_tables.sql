@@ -46,6 +46,7 @@ CREATE TABLE BOOKING (
   id                   BIGSERIAL PRIMARY KEY                  NOT NULL,
   check_in             DATE                                   NOT NULL,
   check_out            DATE                                   NOT NULL,
+  price                NUMERIC(12, 2)                         NOT NULL,
   fk_accommodation_id  BIGINT   REFERENCES ACCOMMODATION(id)  NOT NULL,
   fk_user_id           BIGINT   REFERENCES USER_INFO(id)      NOT NULL,
   UNIQUE (check_in, check_out, fk_accommodation_id)

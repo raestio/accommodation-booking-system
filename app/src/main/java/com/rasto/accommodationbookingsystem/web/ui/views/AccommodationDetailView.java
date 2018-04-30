@@ -2,7 +2,12 @@ package com.rasto.accommodationbookingsystem.web.ui.views;
 
 import com.rasto.accommodationbookingsystem.HasLogger;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
+import com.rasto.accommodationbookingsystem.backend.data.entity.Booking;
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
+import com.rasto.accommodationbookingsystem.backend.service.BookingsService;
+import com.rasto.accommodationbookingsystem.exception.AccommodationNotFoundException;
+import com.rasto.accommodationbookingsystem.exception.UserNotAuthenticatedException;
+import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.BoardLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.BookingForm;
@@ -21,6 +26,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Route(value = "accommodations", layout = MainLayout.class)
@@ -51,9 +58,6 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
     @Id("bookingForm")
     private BookingForm bookingForm;
 
-
-
-
     @Id("photoModal")
     private Div photoModal;
 
@@ -63,16 +67,52 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
     @Id("photoModalImg")
     private Image photoModalImg;
 
-    private AccommodationService accommodationService;
+    private final AccommodationService accommodationService;
+    private final BookingsService bookingsService;
+    private final UserAuthenticationState userAuthenticationState;
 
     @Autowired
-    public AccommodationDetailView(AccommodationService accommodationService) {
+    public AccommodationDetailView(AccommodationService accommodationService, BookingsService bookingsService, UserAuthenticationState userAuthenticationState) {
         this.accommodationService = accommodationService;
-        bookingForm.setOnCheckOutDateChangeListener((checkIn, checkOut) -> {
-
-        });
+        this.bookingsService = bookingsService;
+        this.userAuthenticationState = userAuthenticationState;
+        initBookingForm();
         photoModal.setVisible(false);
         photoModalClose.addClickListener(e -> photoModal.setVisible(false));
+    }
+
+    private void initBookingForm() {
+        bookingForm.setOnCheckOutDateChangeListener((checkIn, checkOut) -> {
+            if (bookingsService.existsBookedDayBetween(checkIn, checkOut, accommodationId)) {
+                bookingForm.clearDatePicker();
+            } else {
+                try {
+                    bookingForm.setTotalPrice(accommodationService.computeTotalBookingPrice(checkIn, checkOut, accommodationId));
+                } catch (AccommodationNotFoundException e) {
+                    e.printStackTrace();
+                    bookingForm.disable();
+                }
+            }
+        });
+
+        bookingForm.setOnBookButtonClickListener((checkIn, checkOut) -> {
+            if (userAuthenticationState.isAuthenticated()) {
+                Booking booking = bookingsService.createNew();
+                booking.setCheckIn(checkIn);
+                booking.setCheckOut(checkOut);
+                booking.setPrice(bookingForm.getTotalPrice());
+                try {
+                    bookingsService.bookAccommodation(booking, accommodationId, userAuthenticationState.getUserId());
+                    getUI().ifPresent(ui -> ui.getPage().reload());
+                    Notification.show("Successfully booked", 5000, Notification.Position.MIDDLE);
+                } catch (UserNotAuthenticatedException e) {
+                    Notification.show(e.getMessage(), 5000, Notification.Position.MIDDLE);
+                }
+
+            } else {
+                Notification.show("If you want to book this accommodation you have to log in or sign up.", 5000, Notification.Position.MIDDLE);
+            }
+        });
     }
 
     @Override
@@ -83,10 +123,16 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
         if (accommodationOpt.isPresent()) {
             Accommodation accommodation = accommodationOpt.get();
             setComponents(accommodation);
+            disableBookedDays();
         } else {
             Notification.show("Accommodation does not exist", 3000, Notification.Position.MIDDLE);
             event.rerouteTo("");
         }
+    }
+
+    private void disableBookedDays() {
+        List<LocalDate> bookedDays = bookingsService.getBookedDays(accommodationId);
+        bookingForm.setDisabledDays(bookedDays);
     }
 
     private void setComponents(Accommodation accommodation) {
@@ -95,13 +141,12 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
         guests.setText(accommodation.getGuests() + " " + (accommodation.getGuests() == 1 ? "guest" : "guests"));
         beds.setText(accommodation.getBathrooms() + " " + (accommodation.getBathrooms() == 1 ? "bed" : "beds"));
         baths.setText(accommodation.getBathrooms() + " " + (accommodation.getBathrooms() == 1 ? "bath" : "baths"));
-
-        accommodation.getPhotos().forEach(photo -> photos.add(createImage(photo.getUrl())));
+        accommodation.getPhotos().forEach(photo -> photos.add(createAccommodationDetailImage(photo.getUrl())));
 
         bookingForm.setPrice(accommodation.getPricePerNight());
     }
 
-    private Image createImage(String url) {
+    private Image createAccommodationDetailImage(String url) {
         Image image = new Image();
         image.setSrc(url);
         image.setClassName("photo");

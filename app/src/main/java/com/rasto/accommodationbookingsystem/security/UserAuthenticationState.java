@@ -16,9 +16,9 @@ public class UserAuthenticationState {
                 && !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
     }
 
-    public String getName() {
+    public Long getUserId() {
         UserDetailsImpl user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return user.getName();
+        return user.getId();
     }
 
 }
