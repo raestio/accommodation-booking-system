@@ -25,4 +25,6 @@ public interface BookingsService extends CrudService<Booking> {
      * @param userId user id
      */
     void bookAccommodation(Booking booking, Long accommodationId, Long userId) throws UserNotAuthenticatedException;
+
+    List<Booking> getBookingsByUserIdOrderedByCheckIn(Long userId) throws UserNotAuthenticatedException;
 }

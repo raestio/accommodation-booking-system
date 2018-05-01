@@ -62,7 +62,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
 
     private Button createLoginButton() {
         login = new Button();
-        login.setText("Login");
+        login.setText("Log In");
         login.setClassName("main-layout__nav-item");
         login.setVisible(false);
         login.addClickListener(e -> login());
@@ -71,7 +71,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
 
     private Button createLogoutButton() {
         logout = new Button();
-        logout.setText("Logout");
+        logout.setText("Log Out");
         logout.setClassName("main-layout__nav-item");
         logout.setVisible(false);
         logout.addClickListener(e -> logout());
@@ -83,7 +83,9 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
         bookings.setText("Bookings");
         bookings.setClassName("main-layout__nav-item");
         bookings.setVisible(false);
-        bookings.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate("bookings")));
+        bookings.addClickListener(e -> {
+            getUI().ifPresent(ui -> ui.navigate("bookings"));
+        });
         return bookings;
     }
 

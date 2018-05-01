@@ -23,6 +23,8 @@ import java.util.stream.IntStream;
 @Service
 public class BookingServiceImpl implements BookingsService, HasLogger {
 
+    private final static String USER_NOT_AUTHENTICATED_MESSAGE = "You are not authenticated. Something bad is going on here.";
+
     private final BookingRepository bookingRepository;
     private final UserAuthenticationState userAuthenticationState;
     private final AccommodationService accommodationService;
@@ -63,7 +65,16 @@ public class BookingServiceImpl implements BookingsService, HasLogger {
             booking.setUser(userService.findById(userId).get());
             saveOrUpdate(booking);
         } else {
-            throw new UserNotAuthenticatedException("You are not authenticated. Something bad is going on here.");
+            throw new UserNotAuthenticatedException(USER_NOT_AUTHENTICATED_MESSAGE);
+        }
+    }
+
+    @Override
+    public List<Booking> getBookingsByUserIdOrderedByCheckIn(Long userId) throws UserNotAuthenticatedException {
+        if (userAuthenticationState.isAuthenticated() && userAuthenticationState.getUserId().equals(userId)) {
+            return bookingRepository.findAllByUser_IdOrderByCheckInAsc(userId);
+        } else {
+            throw new UserNotAuthenticatedException(USER_NOT_AUTHENTICATED_MESSAGE);
         }
     }
 

@@ -39,6 +39,7 @@ public class LoginView extends PolymerTemplate<TemplateModel> implements HasLogg
     public LoginView(DaoAuthenticationProvider daoAuthenticationProvider) {
         this.daoAuthenticationProvider = daoAuthenticationProvider;
         loginButton.addClickListener(event -> login());
+        emailField.setAutofocus(true);
     }
 
     private void login() {

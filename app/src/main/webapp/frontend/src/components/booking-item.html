@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../styles/shared-styles.html">
+
+<dom-module id="booking-item">
+    <template>
+        <style include="shared-styles">
+
+            .booking-item-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 98vw;
+                height: 8em;
+                align-items: center;
+                margin: 0;
+                padding: 0;
+                background: white;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+                overflow: hidden;
+                cursor: pointer;
+                border-radius: 10px;
+            }
+
+            .booking-item-container:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+                transform: scale(1.01);
+            }
+
+            .booking-photo {
+                object-fit: cover;
+                width:16em;
+                height:10em;
+                cursor: pointer;
+            }
+
+            .booking-item {
+                font-size: 22px;
+                color: #484848;
+                font-weight: 300;
+            }
+        </style>
+
+        <div class="booking-item-container">
+            <img id="photo" class="booking-photo"/>
+            <span id="city" class="booking-item"></span>
+            <span id="checkInCheckOut" class="booking-item"></span>
+            <span id="price" class="booking-item" style="margin-right: 10px"></span>
+        </div>
+    </template>
+
+    <script>
+        class BookingItem extends Polymer.Element {
+            static get is() {
+                return 'booking-item';
+            }
+        }
+
+        window.customElements.define(BookingItem.is, BookingItem);
+    </script>
+
+</dom-module>
