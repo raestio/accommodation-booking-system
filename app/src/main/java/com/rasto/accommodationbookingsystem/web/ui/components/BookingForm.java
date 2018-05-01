@@ -68,19 +68,23 @@ public class BookingForm extends PolymerTemplate<BookingForm.Model> implements H
 
     public void setOnCheckOutDateChangeListener(OnCheckOutDateChangeListener onCheckOutDateChangeListener) {
         getElement().addPropertyChangeListener("dateTo", event -> {
-            if (!event.getValue().toString().isEmpty() && !event.getValue().toString().equals(getModel().getDateFrom())) {
+
+            if (!event.getValue().toString().isEmpty() && !event.getValue().toString().equals(getModel().getDateFrom()) && isNowOrInFuture(getCheckInDate())) {
                 setTotalVisible(true);
                 bookButton.setEnabled(true);
                 onCheckOutDateChangeListener.onChange(getCheckInDate(), getCheckOutDate());
             } else {
                 setTotalVisible(false);
                 bookButton.setEnabled(false);
-            }
-
-            if (event.getValue().toString().equals(getModel().getDateFrom())) {
-                clearDatePicker();
+                if (event.getValue().toString().equals(getModel().getDateFrom()) || !isNowOrInFuture(getCheckInDate())) {
+                    clearDatePicker();
+                }
             }
         });
+    }
+
+    private boolean isNowOrInFuture(LocalDate checkInDate) {
+        return !checkInDate.isBefore(LocalDate.now());
     }
 
     public void setTotalPriceSpanText(String text) {
