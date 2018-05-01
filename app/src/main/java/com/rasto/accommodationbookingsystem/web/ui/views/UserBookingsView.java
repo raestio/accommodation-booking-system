@@ -70,6 +70,7 @@ public class UserBookingsView extends PolymerTemplate<TemplateModel> implements 
         bookingItem.setCity(booking.getAccommodation().getAddress().getCity());
         bookingItem.setPrice(booking.getPrice().toString() + " CZK");
         bookingItem.setCheckInCheckOut(booking.getCheckIn().format(dateTimeFormatter) + " - " + booking.getCheckOut().format(dateTimeFormatter));
+        bookingItem.addClickListener(item -> getUI().ifPresent(ui -> ui.navigate("accommodations/" + item.getSource().getAccommodationId())));
         return bookingItem;
     }
 }
