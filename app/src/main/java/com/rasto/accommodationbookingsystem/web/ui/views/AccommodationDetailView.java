@@ -13,9 +13,11 @@ import com.rasto.accommodationbookingsystem.web.ui.components.BoardLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.BookingForm;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -103,8 +105,7 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
                 booking.setPrice(bookingForm.getTotalPrice());
                 try {
                     bookingsService.bookAccommodation(booking, accommodationId, userAuthenticationState.getUserId());
-                    getUI().ifPresent(ui -> ui.getPage().reload());
-                    Notification.show("Successfully booked", 5000, Notification.Position.MIDDLE);
+                    showOnSuccessfullyBookedNotification();
                 } catch (UserNotAuthenticatedException e) {
                     Notification.show(e.getMessage(), 5000, Notification.Position.MIDDLE);
                 }
@@ -113,6 +114,18 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
                 Notification.show("If you want to book this accommodation you have to log in or sign up.", 5000, Notification.Position.MIDDLE);
             }
         });
+    }
+
+    private void showOnSuccessfullyBookedNotification() {
+        Label label = new Label("Accommodation successfully booked");
+        Button button = new Button("OK");
+        Notification notification = new Notification(label, button);
+        button.addClickListener(e -> {
+            notification.close();
+            getUI().ifPresent(ui -> ui.getPage().reload());
+        });
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.open();
     }
 
     @Override
