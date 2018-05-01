@@ -1,4 +1,4 @@
-package com.rasto.accommodationbookingsystem.dto;
+package com.rasto.accommodationbookingsystem.backend.service.dto;
 
 import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
 

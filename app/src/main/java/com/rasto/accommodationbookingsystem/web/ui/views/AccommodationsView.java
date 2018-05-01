@@ -2,7 +2,7 @@ package com.rasto.accommodationbookingsystem.web.ui.views;
 
 import com.rasto.accommodationbookingsystem.HasLogger;
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
-import com.rasto.accommodationbookingsystem.dto.AccommodationCardDTO;
+import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationCardDTO;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.AccommodationCard;
 import com.rasto.accommodationbookingsystem.web.ui.components.BoardLayout;

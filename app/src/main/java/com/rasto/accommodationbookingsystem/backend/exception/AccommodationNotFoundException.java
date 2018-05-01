@@ -1,4 +1,4 @@
-package com.rasto.accommodationbookingsystem.exception;
+package com.rasto.accommodationbookingsystem.backend.exception;
 
 public class AccommodationNotFoundException extends Exception {
 }

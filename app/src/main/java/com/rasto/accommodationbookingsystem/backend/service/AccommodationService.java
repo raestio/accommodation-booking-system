@@ -1,8 +1,8 @@
 package com.rasto.accommodationbookingsystem.backend.service;
 
 import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
-import com.rasto.accommodationbookingsystem.dto.AccommodationCardDTO;
-import com.rasto.accommodationbookingsystem.exception.AccommodationNotFoundException;
+import com.rasto.accommodationbookingsystem.backend.exception.AccommodationNotFoundException;
+import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationCardDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

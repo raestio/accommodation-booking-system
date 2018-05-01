@@ -1,10 +1,10 @@
 package com.rasto.accommodationbookingsystem.backend.service.impl;
 
 import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
+import com.rasto.accommodationbookingsystem.backend.exception.AccommodationNotFoundException;
 import com.rasto.accommodationbookingsystem.backend.repository.AccommodationRepository;
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
-import com.rasto.accommodationbookingsystem.dto.AccommodationCardDTO;
-import com.rasto.accommodationbookingsystem.exception.AccommodationNotFoundException;
+import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationCardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

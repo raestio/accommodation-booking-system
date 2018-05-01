@@ -1,7 +1,7 @@
 package com.rasto.accommodationbookingsystem.backend.service;
 
 import com.rasto.accommodationbookingsystem.backend.data.entity.Booking;
-import com.rasto.accommodationbookingsystem.exception.UserNotAuthenticatedException;
+import com.rasto.accommodationbookingsystem.backend.exception.UserNotAuthenticatedException;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -2,11 +2,11 @@ package com.rasto.accommodationbookingsystem.backend.service.impl;
 
 import com.rasto.accommodationbookingsystem.HasLogger;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Booking;
+import com.rasto.accommodationbookingsystem.backend.exception.UserNotAuthenticatedException;
 import com.rasto.accommodationbookingsystem.backend.repository.BookingRepository;
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
 import com.rasto.accommodationbookingsystem.backend.service.BookingsService;
 import com.rasto.accommodationbookingsystem.backend.service.UserService;
-import com.rasto.accommodationbookingsystem.exception.UserNotAuthenticatedException;
 import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
