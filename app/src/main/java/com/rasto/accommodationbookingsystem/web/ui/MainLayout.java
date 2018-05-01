@@ -83,6 +83,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
         bookings.setText("Bookings");
         bookings.setClassName("main-layout__nav-item");
         bookings.setVisible(false);
+        bookings.addClickListener(e -> getUI().ifPresent(ui -> ui.navigate("bookings")));
         return bookings;
     }
 
