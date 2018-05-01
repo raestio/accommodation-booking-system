@@ -41,8 +41,8 @@ public class User implements Serializable {
     @PrePersist
     @PreUpdate
     private void prepareData(){
-        this.email = email == null ? null : email.toLowerCase();
-        this.role = Role.USER;
+        this.email = (email == null) ? email : email.toLowerCase();
+        this.role = (role == null) ? Role.USER : role;
     }
 
     public Long getId() {
