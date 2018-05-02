@@ -1,0 +1,52 @@
+{
+  "name": "vaadin-control-state-mixin",
+  "homepage": "https://vaadin.com/elements",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "description": "vaadin-control-state-mixin",
+  "main": "vaadin-control-state-mixin.html",
+  "keywords": [
+    "Vaadin",
+    "vaadin-control-state-mixin",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
+  ],
+  "devDependencies": {
+    "iron-test-helpers": "^2.0.0",
+    "web-component-tester": "^6.1.5",
+    "webcomponentsjs": "^1.0.0",
+    "iron-form": "^2.0.0",
+    "iron-input": "^2.0.0",
+    "paper-button": "^2.0.0",
+    "paper-input": "^2.0.0",
+    "vaadin-button": "master",
+    "vaadin-checkbox": "master",
+    "vaadin-combo-box": "master",
+    "vaadin-date-picker": "master",
+    "vaadin-dropdown-menu": "master",
+    "vaadin-item": "master",
+    "vaadin-list-box": "master",
+    "vaadin-radio-button": "master",
+    "vaadin-text-field": "master"
+  },
+  "dependencies": {
+    "polymer": "^2.0.0"
+  },
+  "resolutions": {
+    "vaadin-button": "master",
+    "vaadin-item": "master",
+    "vaadin-text-field": "master"
+  }
+}

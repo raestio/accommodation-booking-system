@@ -1,0 +1,182 @@
+<dom-module id="dropdown-menu-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Basic Usage</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-basic">
+      <template preserve-content>
+        <vaadin-dropdown-menu>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Configuring the Dropdown</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-configuring">
+      <template preserve-content>
+        <vaadin-dropdown-menu label="Label" placeholder="Placeholder">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item value="1">Option one</vaadin-item>
+              <vaadin-item value="2">Option two</vaadin-item>
+              <vaadin-item value="3">Option three</vaadin-item>
+              <vaadin-item value="4">Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+        <vaadin-dropdown-menu label="Disabled" disabled>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+        <vaadin-dropdown-menu label="Read-only" readonly value="Option one">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+        <vaadin-dropdown-menu label="Required" required>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item value="" disabled>Select an option</vaadin-item>
+              <hr>
+              <vaadin-item value="1">Option one</vaadin-item>
+              <vaadin-item value="2">Option two</vaadin-item>
+              <vaadin-item value="3">Option three</vaadin-item>
+              <vaadin-item value="4">Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Error Message</h3>
+    <p>
+      The <code>errorMessage</code> property defines a message that gets shown when the selected value is invalid.
+    </p>
+    <p>
+      <b>NOTE: The message is not visible initially or when the field is valid</b>
+    </p>
+    <vaadin-demo-snippet id="dropdown-menu-error-message">
+      <template preserve-content>
+        <vaadin-dropdown-menu label="Required, with error message" error-message="Please choose one option" required>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item value="">Select an option</vaadin-item>
+              <hr>
+              <vaadin-item value="1">Option one</vaadin-item>
+              <vaadin-item value="2">Option two</vaadin-item>
+              <vaadin-item value="3">Option three</vaadin-item>
+              <vaadin-item value="4">Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom Label</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-value">
+      <template preserve-content>
+        <vaadin-dropdown-menu placeholder="Language">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item label="">Other</vaadin-item>
+              <vaadin-item label="ES">Spanish</vaadin-item>
+              <vaadin-item label="FI">Finnish</vaadin-item>
+              <vaadin-item label="EN">English</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>The Value Property</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-value">
+      <template preserve-content>
+        <vaadin-dropdown-menu placeholder="Language" value="ES">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item value="" label="">Other</vaadin-item>
+              <vaadin-item value="ES" label="Spanish">Spanish (default)</vaadin-item>
+              <vaadin-item value="FI" label="Finnish">Finnish</vaadin-item>
+              <vaadin-item value="EN" label="English">English</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Styling the Content</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-styling">
+      <template preserve-content>
+        <style>
+          vaadin-item {
+            font-style: italic;
+          }
+        </style>
+        <vaadin-dropdown-menu label="Name">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom Content</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-content">
+      <template preserve-content>
+        <vaadin-dropdown-menu label="User">
+          <div slot="prefix"><iron-icon icon="lumo:user"></iron-icon></div>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>
+                <img style="width: 21px; border-radius: 50%; vertical-align: bottom" src="https://randomuser.me/api/portraits/women/43.jpg" />
+                &nbsp;Gabriella
+              </vaadin-item>
+              <vaadin-item>
+                <img style="width: 21px; border-radius: 50%; vertical-align: bottom" src="https://randomuser.me/api/portraits/men/77.jpg" />
+                &nbsp;Rudi
+              </vaadin-item>
+              <vaadin-item>
+                <img style="width: 21px; border-radius: 50%; vertical-align: bottom" src="https://randomuser.me/api/portraits/men/35.jpg" />
+                &nbsp;Hamsa
+              </vaadin-item>
+              <vaadin-item>
+                <img style="width: 21px; border-radius: 50%; vertical-align: bottom" src="https://randomuser.me/api/portraits/men/76.jpg" />
+                &nbsp;Jacob
+              </vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DropdownMenuBasicDemos extends DemoReadyEventEmitter(DropdownMenuDemo(Polymer.Element)) {
+      static get is() {
+        return 'dropdown-menu-basic-demos';
+      }
+    }
+    customElements.define(DropdownMenuBasicDemos.is, DropdownMenuBasicDemos);
+  </script>
+</dom-module>

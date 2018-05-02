@@ -1,0 +1,779 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-dropdown-menu tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+  <link rel="import" href="mock-item.html">
+  <link rel="import" href="../vaadin-dropdown-menu.html">
+  <link rel="import" href="not-animated-styles.html">
+</head>
+
+<body>
+  <test-fixture id="dropdown">
+    <template>
+      <vaadin-dropdown-menu placeholder="placeholder">
+        <template>
+          <vaadin-list-box>
+            <mock-item>Option 1</mock-item>
+            <mock-item value="v2" label="o2">Option 2</mock-item>
+            <mock-item>Option 3</mock-item>
+            <mock-item></mock-item>
+            <mock-item label="">Empty</mock-item>
+            <mock-item value="" disabled>Disabled</mock-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="notemplate">
+    <template>
+      <vaadin-dropdown-menu>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="nomenu">
+    <template>
+      <vaadin-dropdown-menu>
+        <template>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="withvalue">
+    <template>
+      <vaadin-dropdown-menu value="v2">
+        <template>
+          <vaadin-list-box>
+            <mock-item value="v1">t1</mock-item>
+            <mock-item value="v2" label="o2">t2</mock-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="menu-element">
+    <template>
+      <vaadin-dropdown-menu>
+        <template>
+          <style>
+            /* Custom styling */
+          </style>
+          <vaadin-list-box>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="style-scope">
+    <template>
+      <vaadin-dropdown-menu value="v1">
+        <template>
+          <vaadin-list-box>
+            <mock-item value="v1">t1</mock-item>
+            <mock-item value="v2">t2</mock-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="dropdown-in-flexbox">
+    <template>
+      <div style="display: flex; flex-direction: column; width:500px;">
+        <vaadin-dropdown-menu></vaadin-dropdown-menu>
+      </div>
+    </template>
+  </test-fixture>
+
+  <dom-module id="x-dropdown">
+    <template>
+      <vaadin-dropdown-menu id="dropdown">
+        <template>
+          <vaadin-list-box>
+            <mock-item value="v1">[[message]]</mock-item>
+            <mock-item value="v2"><input value="{{text::input}}"></mock-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', function() {
+        class XDropdown extends Polymer.Element {
+          static get is() {
+            return 'x-dropdown';
+          }
+          static get properties() {
+            return {
+              message: String,
+              text: String
+            };
+          }
+        }
+        window.customElements.define(XDropdown.is, XDropdown);
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="binding">
+    <template>
+      <x-dropdown></x-dropdown>
+    </template>
+  </test-fixture>
+
+  <script>
+    function arrowUp(target) {
+      MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
+    }
+    function arrowDown(target) {
+      MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
+    }
+    function Space(target) {
+      MockInteractions.keyDownOn(target, 32, [], ' ');
+    }
+    function Enter(target) {
+      MockInteractions.keyDownOn(target, 13, [], 'Enter');
+    }
+    function Tab(target) {
+      MockInteractions.keyDownOn(target, 9, [], 'Tab');
+    }
+    function Escape(target) {
+      MockInteractions.keyDownOn(target, 27, [], 'Escape');
+    }
+
+    describe('vaadin-dropdown-menu no-template', () => {
+      let dropdown;
+
+      beforeEach(() => dropdown = fixture('notemplate'));
+
+      it('should not throw an exception if template is not present', () => {
+        dropdown.opened = true;
+        dropdown.value = 'foo';
+        dropdown.opened = false;
+      });
+    });
+
+    describe('vaadin-dropdown-menu menu-element', () => {
+      let dropdown;
+
+      beforeEach(() => dropdown = fixture('menu-element'));
+
+      it('should correctly detect the first menu element', () => {
+        expect(dropdown._menuElement.localName).to.be.eql('vaadin-list-box');
+      });
+    });
+
+    describe('vaadin-dropdown-menu no-menu', () => {
+      let dropdown;
+      beforeEach(() => dropdown = fixture('nomenu'));
+
+      it('should not throw an exception if menu list is not present', () => {
+        dropdown.opened = true;
+        dropdown.value = 'foo';
+        dropdown.opened = false;
+      });
+    });
+
+    describe('vaadin-dropdown-menu inside flexbox', () => {
+      it('dropdown should stretch inside a column flex container', () => {
+        const container = fixture('dropdown-in-flexbox');
+        const dropdown = container.querySelector('vaadin-dropdown-menu');
+        expect(window.getComputedStyle(container).width).to.eql('500px');
+        expect(parseFloat(window.getComputedStyle(dropdown).width)).to.eql(500);
+      });
+    });
+
+    describe('vaadin-dropdown-menu with-value', () => {
+      let dropdown, menu;
+
+      beforeEach(done => {
+        dropdown = fixture('withvalue');
+        menu = dropdown._menuElement;
+        Polymer.RenderStatus.afterNextRender(menu, () => setTimeout(done));
+      });
+
+      it('should be possible to set value declaratively', () => {
+        expect(menu.selected).to.be.equal(1);
+        expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
+      });
+    });
+
+    describe('vaadin-dropdown-menu style scope', () => {
+      let dropdown, menu;
+
+      beforeEach(done => {
+        dropdown = fixture('style-scope');
+        menu = dropdown._menuElement;
+        Polymer.RenderStatus.afterNextRender(menu, () => setTimeout(done));
+      });
+
+      it('should not apply overlay style scope to the clone of selected item', () => {
+        const valueElement = dropdown._valueElement.firstChild;
+        expect(valueElement.classList.contains('vaadin-dropdown-menu-overlay')).to.be.false;
+      });
+    });
+
+    describe('vaadin-dropdown-menu data binding', function() {
+      let container, dropdown, menu;
+
+      beforeEach(done => {
+        container = fixture('binding');
+        dropdown = container.$.dropdown;
+        menu = dropdown._menuElement;
+        Polymer.RenderStatus.afterNextRender(menu, () => setTimeout(done));
+      });
+
+      it('dropdown-menu should bind parent property', () => {
+        container.message = 'foo';
+        expect(menu.items[0].textContent.trim()).to.equal('foo');
+      });
+
+      it('dropdown-menu should support two-way data binding', () => {
+        const input = menu.items[1].querySelector('input');
+        input.value = 'bar';
+        input.dispatchEvent(new CustomEvent('input'));
+        expect(container.text).to.equal('bar');
+      });
+    });
+
+    describe('vaadin-dropdown-menu', () => {
+      let dropdown, input;
+
+      beforeEach(() => {
+        dropdown = fixture('dropdown');
+        input = dropdown._inputElement;
+      });
+
+      it('should have a valid localName', () => {
+        expect(dropdown.localName).to.be.equal('vaadin-dropdown-menu');
+      });
+
+      it('should have a modified template with a slot for value', () => {
+        const modifiedTemplate = dropdown._inputElement.constructor.template;
+        expect(modifiedTemplate.content.querySelector('slot[name="value"]')).to.be.ok;
+      });
+
+      it('should wrap native input in the value slot in a modified template', () => {
+        const modifiedTemplate = dropdown._inputElement.constructor.template;
+        const slot = modifiedTemplate.content.querySelector('slot[name="value"]');
+        const nativeInput = modifiedTemplate.content.querySelector('input');
+        expect(nativeInput.getAttribute('part')).to.equal('value');
+        expect(slot.firstElementChild).to.equal(nativeInput);
+      });
+
+      describe('selection', () => {
+        let menu;
+
+        beforeEach(done => {
+          dropdown.opened = true;
+          menu = dropdown._menuElement;
+          Polymer.RenderStatus.afterNextRender(menu, done);
+        });
+
+        it('should select the first item with an empty value by default', () => {
+          expect(menu.selected).to.be.equal(0);
+        });
+
+        it('Should close the overlay when selecting a new item', () => {
+          menu.selected = 2;
+          expect(dropdown._overlayElement.opened).to.be.false;
+        });
+
+        it('Should update selection slot with a clone of the selected item', () => {
+          menu.selected = 2;
+          const itemElement = dropdown._items[menu.selected];
+          const valueElement = dropdown._valueElement.firstChild;
+          expect(valueElement).not.to.be.equal(itemElement);
+          expect(valueElement.localName).to.be.equal(itemElement.localName);
+          expect(valueElement.textContent).to.be.equal(itemElement.textContent);
+        });
+
+        it('Should preserve the selected attribute when selecting the disabled item', () => {
+          menu.selected = 5;
+          const valueElement = dropdown._valueElement.firstChild;
+          expect(valueElement.selected).to.be.true;
+          expect(valueElement.disabled).to.be.true;
+        });
+
+        it('Should not update value if the selected item has not a value', () => {
+          menu.selected = 2;
+          expect(dropdown.value).to.be.empty;
+        });
+
+        it('Should update value with the value of the selected item', () => {
+          menu.selected = 1;
+          expect(dropdown.value).to.be.equal('v2');
+        });
+
+        it('Should set empty value if a item without `value` is selected', () => {
+          menu.selected = 1;
+          menu.selected = 2;
+          expect(dropdown.value).to.be.empty;
+        });
+
+        it('Should remove tabindex when cloning the selected element', () => {
+          menu.selected = 2;
+          const itemElement = dropdown._items[menu.selected];
+          const valueElement = dropdown._valueElement.firstChild;
+          expect(itemElement.tabIndex).to.be.equal(0);
+          expect(valueElement.hasAttribute('tabindex')).to.be.false;
+        });
+
+        it('Should update selection slot textContent with the selected item `label` string', () => {
+          menu.selected = 1;
+          expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
+        });
+
+        it('should wrap the selected item `label` string in selected vaadin item', () => {
+          menu.selected = 1;
+          const item = dropdown._valueElement.firstElementChild;
+          expect(item.localName).to.equal('vaadin-item');
+          expect(item.textContent).to.equal('o2');
+          expect(item.selected).to.be.true;
+          expect(item.getAttribute('tabindex')).to.be.null;
+        });
+
+        it('Should update selection slot when value is provided', () => {
+          dropdown.value = 'v2';
+          expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
+        });
+
+        it('Should update overlay selected item when value is provided', () => {
+          dropdown.value = 'v2';
+          expect(menu.selected).to.be.equal(1);
+        });
+
+        it('Should select first item with empty value when when value is not found in items', () => {
+          dropdown.value = 'v2';
+          dropdown.value = 'foo';
+          expect(menu.selected).to.be.equal(0);
+        });
+
+        describe('has-value attribute on text-field', () => {
+          it('should not be set by default', () => {
+            expect(dropdown._inputElement.getAttribute('has-value')).to.be.null;
+          });
+
+          it('should set when value is set to not empty', () => {
+            dropdown.value = 'v2';
+            expect(dropdown._inputElement.getAttribute('has-value')).to.equal('');
+          });
+
+          it('should remove when value is set to empty', () => {
+            dropdown.value = 'v2';
+            dropdown.value = '';
+            expect(dropdown._inputElement.getAttribute('has-value')).to.be.null;
+          });
+        });
+      });
+
+      describe('opening the overlay', () => {
+
+        beforeEach(flush);
+
+        it('should keep synchronized opened properties in overlay and dropdown', () => {
+          dropdown.opened = true;
+          expect(dropdown.opened).to.be.true;
+          expect(dropdown._overlayElement.opened).to.be.true;
+
+          dropdown.opened = false;
+          expect(dropdown._overlayElement.opened).to.be.false;
+          expect(dropdown.opened).to.be.false;
+        });
+
+        it('should restore attribute focus-ring if it was initially set before opening', () => {
+          dropdown.setAttribute('focus-ring', '');
+          dropdown.opened = true;
+          dropdown.opened = false;
+          expect(dropdown.focusElement.hasAttribute('focus-ring')).to.be.true;
+        });
+
+        it('overlay should be opened on click event on input field', () => {
+          expect(dropdown._overlayElement.opened).to.be.false;
+          MockInteractions.tap(input.root.querySelector('[part="input-field"]'));
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('overlay should not be opened on click event on underlying native input', () => {
+          expect(dropdown._overlayElement.opened).to.be.false;
+          const nativeInput = dropdown._inputElement.shadowRoot.querySelector('input');
+          MockInteractions.tap(nativeInput);
+          expect(dropdown._overlayElement.opened).to.be.false;
+        });
+
+        it('overlay should be opened on click event on toggle button', () => {
+          expect(dropdown._overlayElement.opened).to.be.false;
+          MockInteractions.tap(dropdown._toggleElement);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On ArrowUp Should open the overlay, not select any item, and keep opened', () => {
+          arrowUp(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On ArrowDown Should open the overlay, not select any item, and keep opened', () => {
+          arrowDown(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On Space Should open the overlay, not select any item, and keep opened', () => {
+          Space(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On Enter Should open the overlay, not select any item, and keep opened', () => {
+          Enter(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On Escape Should close the overlay', () => {
+          dropdown.opened = true;
+
+          Escape(input);
+          expect(dropdown._overlayElement.opened).to.be.false;
+        });
+
+        it('should open the overlay on top left corner by default on input click', () => {
+          Enter(input);
+          expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
+          expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
+        });
+
+        it('should store the text-field width in the custom CSS property on overlay opening', () => {
+          input.style.width = '200px';
+          dropdown.opened = true;
+
+          const prop = '--vaadin-dropdown-menu-text-field-width';
+          const value = window.ShadyCSS ?
+            window.ShadyCSS.getComputedStyleValue(dropdown._overlayElement, prop) :
+            getComputedStyle(dropdown._overlayElement).getPropertyValue(prop);
+
+          expect(value).to.be.equal(input.getBoundingClientRect().width + 'px');
+        });
+      });
+
+      describe('disabled', () => {
+        it('should disable the input and disable opening if dropdown-menu is disabled', () => {
+          dropdown.disabled = true;
+
+          expect(input.disabled).to.be.true;
+
+          Enter(input);
+          expect(dropdown._overlayElement.opened).to.be.false;
+
+          input.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          expect(dropdown._overlayElement.opened).to.be.false;
+        });
+      });
+
+      describe('readonly', () => {
+        it('should disable opening if dropdown-menu is readonly', () => {
+          dropdown.readonly = true;
+
+          Enter(input);
+          expect(dropdown._overlayElement.opened).to.be.false;
+
+          input.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          expect(dropdown._overlayElement.opened).to.be.false;
+        });
+      });
+
+      describe('focus', () => {
+
+        it('Should be focusable', () => {
+          dropdown.focus();
+          expect(dropdown.hasAttribute('focused')).to.be.true;
+          expect(input.hasAttribute('focused')).to.be.true;
+        });
+
+        it('should not focus the input by default', () => {
+          expect(dropdown.focusElement.hasAttribute('focused')).not.to.be.ok;
+        });
+
+        it('Should set tabindex attribute to -1 on the native input', () => {
+          expect(dropdown._nativeInput.getAttribute('tabindex')).to.be.equal('-1');
+        });
+
+        it('Should focus the next focusable element when tabbing', () => {
+          dropdown.focus();
+
+          // Tabbing does not nativelly move the focus, hence we only can check that the event is not prevented
+          const ev = MockInteractions.keyboardEventFor(9, [], 'Tab');
+          input.dispatchEvent(ev);
+          expect(ev.defaultPrevented).to.be.false;
+        });
+
+        it('Should focus the previous element when shift tabbing', () => {
+          dropdown.focus();
+
+          // Tabbing does not nativelly move the focus, hence we only can check that the event is not prevented
+          const ev = MockInteractions.keyboardEventFor(9, ['shift'], 'Tab');
+          input.dispatchEvent(ev);
+          expect(ev.defaultPrevented).to.be.false;
+        });
+
+        it('Should set pointer-events to none on the native input to fix iOS Zooming', () => {
+          dropdown.value = 'nomatch';
+          const nativeInput = dropdown._inputElement.shadowRoot.querySelector('input');
+          expect(getComputedStyle(nativeInput)['pointer-events']).to.equal('none');
+        });
+      });
+
+      describe('focus when overlay opened', () => {
+        beforeEach(done => {
+          const menu = dropdown._menuElement;
+          Polymer.RenderStatus.afterNextRender(menu, done);
+        });
+
+        it('when focused it should keep focused state after opening overlay', () => {
+          dropdown.focus();
+          dropdown.opened = true;
+          expect(dropdown.hasAttribute('focused')).to.be.true;
+          expect(input.hasAttribute('focused')).to.be.true;
+        });
+
+        it('if not focused it should not set focused state after opening overlay', () => {
+          dropdown.opened = true;
+          expect(dropdown.hasAttribute('focused')).to.be.false;
+          expect(input.hasAttribute('focused')).to.be.false;
+        });
+      });
+
+      describe('overlay opened', () => {
+        let menu;
+
+        beforeEach(done => {
+          menu = dropdown._menuElement;
+          Polymer.RenderStatus.afterNextRender(menu, () => {
+            dropdown.focus();
+            Enter(input);
+            done();
+          });
+        });
+
+        it('should close the dropdown-menu on selecting the same value', () => {
+          Enter(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+          dropdown._items[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          expect(dropdown._overlayElement.opened).to.be.false;
+        });
+
+        it('should focus the input on selecting value and closing the overlay', () => {
+          const focusedSpy = sinon.spy();
+          dropdown.focusElement.focus = focusedSpy;
+
+          menu.selected = 1;
+          expect(dropdown.value).to.be.equal(dropdown._items[menu.selected].value);
+          expect(dropdown._overlayElement.opened).to.be.false;
+
+          expect(focusedSpy).to.be.calledOnce;
+        });
+
+        // iOS 10.3 has broken resize event: https://bugs.webkit.org/show_bug.cgi?id=170595
+        if (!/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          it('should set _phone property and phone attribute to true when dimensions are below 420', done => {
+            expect(dropdown._phone).to.be.false;
+            expect(dropdown._overlayElement.hasAttribute('phone')).to.be.false;
+
+            const wrapper = window.top.document.querySelector('#subsuites');
+            const iframe = window.top.document.querySelector('.subsuite');
+
+            dropdown.addEventListener('iron-resize', () => {
+              expect(dropdown._phone).to.be.true;
+              expect(dropdown._overlayElement.hasAttribute('phone')).to.be.true;
+              wrapper.style.removeProperty('height');
+              wrapper.style.removeProperty('width');
+              iframe.style.removeProperty('width');
+              iframe.style.removeProperty('height');
+              iframe.style.removeProperty('minHeight');
+              iframe.style.removeProperty('minWidth');
+              done();
+            });
+
+            wrapper.style.height = '419px';
+            wrapper.style.width = '419px';
+
+            // fix iframe sizing in iOS
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.minHeight = '419px';
+            iframe.style.minWidth = '419px';
+          });
+        }
+
+        it('should remove focused state from the input on closing the overlay if phone', () => {
+          dropdown._phone = true;
+          menu.selected = 1;
+          expect(dropdown.hasAttribute('focused')).to.be.false;
+          expect(input.hasAttribute('focused')).to.be.false;
+        });
+
+        it('should not focus the input on closing the overlay if phone', () => {
+          const focusedSpy = sinon.spy();
+          dropdown.focusElement.focus = focusedSpy;
+
+          dropdown._phone = true;
+          menu.selected = 1;
+          expect(focusedSpy).not.to.be.called;
+        });
+
+        it('should focus the input before moving the focus to next selectable element', () => {
+          const focusedSpy = sinon.spy();
+          dropdown.focusElement.focus = focusedSpy;
+
+          Tab(menu);
+          expect(focusedSpy).to.be.calledOnce;
+        });
+
+        it('Should hide native input when a item is selected, and it has content', () => {
+          menu.selected = 2;
+          expect(dropdown._valueElement.slot).to.equal('value');
+        });
+
+        it('Should toggle native native input visibility when the content of the selected item is empty', () => {
+          menu.selected = 2;
+
+          menu.selected = 3;
+          expect(dropdown._valueElement.slot).to.equal('');
+        });
+
+        it('Should show native input when label of the selected items is an empty string', () => {
+          menu.selected = 4;
+          expect(dropdown._valueElement.slot).to.equal('');
+        });
+
+        it('Should close the overlay when clicking on the overlay', () => {
+          dropdown.opened = false;
+          dropdown._overlayElement.click();
+          expect(dropdown.opened).to.be.false;
+        });
+
+        // iOS Safari has incorrect viewport height when navigation bar is
+        // visible in landscape orientation. This is workarounded by exposing
+        // --vaadin-overlay-viewport-bottom in <vaadin-overlay>.
+        if (!window.ShadyCSS || window.ShadyCSS.nativeCss) {
+          it('should support --vaadin-overlay-viewport-bottom CSS property', () => {
+            const overlay = dropdown._overlayElement;
+            overlay.setAttribute('phone', '');
+            overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
+            expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.equal('50px');
+          });
+        }
+      });
+
+      describe('aria', () => {
+
+        beforeEach(flush);
+
+        it('should have aria-required attribute set to true when required', () => {
+          dropdown.setAttribute('required', '');
+          expect(dropdown.getAttribute('aria-required')).to.be.equal('true');
+        });
+
+        it('should have aria-disabled attribute set to true when disabled', () => {
+          dropdown.setAttribute('disabled', '');
+          expect(dropdown.getAttribute('aria-disabled')).to.be.equal('true');
+        });
+
+        it('should have aria-hidden attribute to the native input', () => {
+          expect(dropdown._nativeInput.getAttribute('aria-hidden')).to.be.equal('true');
+        });
+
+        it('should have role button on the toggle button', () => {
+          expect(dropdown._toggleElement.getAttribute('role')).to.be.equal('button');
+        });
+
+        it('should have aria-label attribute on the toggle button', () => {
+          expect(dropdown._toggleElement.getAttribute('aria-label')).to.equal('Toggle');
+        });
+
+        it('should set aria-expanded attribute on the toggle button', () => {
+          expect(dropdown._toggleElement.getAttribute('aria-expanded')).to.be.equal('false');
+          dropdown.opened = true;
+          expect(dropdown._toggleElement.getAttribute('aria-expanded')).to.be.equal('true');
+        });
+      });
+
+      describe('validation', () => {
+        it('should set invalid to true when is required but there is no value', () => {
+          expect(dropdown.invalid).to.be.false;
+          dropdown.setAttribute('required', '');
+
+          Enter(input);
+          Escape(input);
+          expect(dropdown.invalid).to.be.true;
+        });
+
+        it('should not set invalid to true when is required, there is no value, but is disabled', () => {
+          expect(dropdown.invalid).to.be.false;
+          dropdown.setAttribute('required', '');
+          dropdown.setAttribute('disabled', '');
+
+          dropdown.validate();
+          expect(dropdown.invalid).to.be.false;
+        });
+
+        it('Should validate when closing the overlay', () => {
+          const spy = sinon.spy();
+          dropdown.validate = spy;
+          dropdown.opened = true;
+
+          dropdown.opened = false;
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should validate when blurring', () => {
+          const spy = sinon.spy();
+          dropdown.validate = spy;
+          dropdown.blur();
+
+          expect(spy).to.be.calledOnce;
+        });
+
+        it('should validate when setting value', () => {
+          const spy = sinon.spy();
+          dropdown.validate = spy;
+          dropdown.value = 'v2';
+          expect(spy).to.be.calledOnce;
+          dropdown.value = '';
+          expect(spy).to.be.calledTwice;
+        });
+
+        it('should show error message when validated.', () => {
+          expect(dropdown.invalid).to.be.false;
+          dropdown.errorMessage = 'Please choose one option';
+          dropdown.setAttribute('required', '');
+          dropdown.validate();
+
+          expect(dropdown.invalid).to.be.true;
+          expect(input.invalid).to.be.true;
+          expect(input.errorMessage).to.be.equal(dropdown.errorMessage);
+        });
+      });
+
+      describe('initial validation', () => {
+        var menu, spy;
+
+        beforeEach(done => {
+          dropdown.required = true;
+          spy = sinon.spy();
+          dropdown.validate = spy;
+          menu = dropdown._menuElement;
+          Polymer.RenderStatus.afterNextRender(menu, done);
+        });
+
+        it('should not validate the initial empty value', () => {
+          expect(spy).not.to.have.been.called;
+        });
+      });
+    });
+  </script>
+</body>

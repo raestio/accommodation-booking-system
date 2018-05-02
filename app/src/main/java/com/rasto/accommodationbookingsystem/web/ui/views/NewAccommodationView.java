@@ -1,5 +1,7 @@
 package com.rasto.accommodationbookingsystem.web.ui.views;
 
+import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
+import com.rasto.accommodationbookingsystem.backend.data.entity.Address;
 import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.vaadin.flow.component.Tag;
@@ -9,6 +11,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -54,11 +57,18 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
     @Id("createButton")
     private Button createButton;
 
+    private final Binder<Accommodation> accommodationBinder = new Binder<>(Accommodation.class);
+    private final Binder<Address> addressBinder = new Binder<>(Address.class);
+
     @Autowired
     public NewAccommodationView(UserAuthenticationState userAuthenticationState) {
         this.userAuthenticationState = userAuthenticationState;
         accommodationName.setAutofocus(true);
         createButton.setEnabled(false);
+        createButton.addClickListener(event -> createAccommodation());
+    }
+
+    private void createAccommodation() {
 
     }
 
