@@ -8,6 +8,8 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
+import com.vaadin.flow.data.validator.StringLengthValidator;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -43,10 +45,23 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
         binder.forField(emailTextField)
                 .withValidator(new EmailValidator("Enter a valid email address"))
                 .withValidator(email -> !userService.exists(email), "User already exists")
-                .bind(User::getEmail, User::setEmail);
-        binder.bind(nameTextField, "name");
-        binder.bind(surnameTextField, "surname");
-        binder.forField(passwordField).withValidator(pass -> pass.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$"), "Need 6 or more chars, mixing digits, lowercase and uppercase letters")
+                .bind(user -> emailTextField.getEmptyValue(), User::setEmail);
+
+        binder.forField(nameTextField)
+                .withConverter(String::trim, String::trim)
+                .withValidator(new StringLengthValidator(
+                        "Name must contain at least 1 printable character",
+                        1, null))
+                .bind(user -> nameTextField.getEmptyValue(), User::setName);
+
+        binder.forField(surnameTextField)
+                .withConverter(String::trim, String::trim)
+                .withValidator(new StringLengthValidator(
+                        "Surname must contain at least 1 printable character",
+                        1, null))
+                .bind(user -> surnameTextField.getEmptyValue(), User::setSurname);
+
+        binder.forField(passwordField).withValidator(pass -> pass.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$"), "Need 6 or more chars, mixing digits, letters and special characters")
                 .bind(user -> passwordField.getEmptyValue(), (user, pass) -> {
                     if (!passwordField.getEmptyValue().equals(pass)) {
                         user.setPassword(passwordEncoder.encode(pass));
@@ -70,6 +85,7 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
 
     private void initPasswordField() {
         passwordField.setLabel("Password");
+        passwordField.setValueChangeMode(ValueChangeMode.EAGER);
         passwordField.setRequired(true);
         getFormLayout().add(passwordField);
     }
@@ -95,9 +111,13 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
     }
 
     private void signUp() {
-        User user = binder.getBean();
-        userService.saveOrUpdate(user);
-        onClose();
+        if (binder.validate().isOk()) {
+            User user = binder.getBean();
+            userService.saveOrUpdate(user);
+            onClose();
+        } else {
+            signUpButton.setEnabled(false);
+        }
     }
 
     private void initEmailField() {
@@ -105,18 +125,4 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
         emailTextField.setRequired(true);
         getFormLayout().add(emailTextField);
     }
-
-    /*
-    private void initNameField() {
-        beverageName.setLabel("Beverage");
-        beverageName.setRequired(true);
-        getFormLayout().add(beverageName);
-
-        getBinder().forField(beverageName)
-                .withConverter(String::trim, String::trim)
-                .withValidator(new StringLengthValidator(
-                        "Beverage name must contain at least 3 printable characters",
-                        3, null))
-                .bind(Review::getName, Review::setName);
-    }*/
 }
