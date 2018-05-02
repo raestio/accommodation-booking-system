@@ -1,0 +1,87 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-icons/vaadin-icons.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
+
+<dom-module id="new-accommodation-view">
+    <template>
+        <style include="view-styles">
+
+            .new-accommodation-form {
+                display: block;
+                background: white;
+                margin-right: auto;
+                margin-left: auto;
+                margin-top: 1em;
+                width: 40vw;
+                padding: 1em;
+            }
+
+            .new-accommodation-title {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 1em;
+                font-size: 38px;
+                color: #484848;
+                font-weight: 700;
+                line-height: 42px;
+            }
+
+            .small-field {
+                width: 12em;
+            }
+
+        </style>
+        <div class="new-accommodation-form">
+            <span class="new-accommodation-title">Add new accommodation</span>
+
+                <vaadin-text-field label="Accommodation name" required="true" style="width: inherit"></vaadin-text-field>
+                <br>
+                <div style="display: flex; flex-direction: row; justify-content: space-between; width: inherit">
+                    <vaadin-text-field prevent-invalid-input pattern="[1-9][0-9]*" class="small-field" label="Number of guests" required="true" >
+                        <iron-icon icon="vaadin:group" slot="prefix"></iron-icon>
+                    </vaadin-text-field>
+                    <vaadin-text-field prevent-invalid-input pattern="[0-9]*" class="small-field" label="Number of beds" required="true">
+                        <iron-icon icon="vaadin:bed" slot="prefix"></iron-icon>
+                    </vaadin-text-field>
+                    <vaadin-text-field prevent-invalid-input pattern="[0-9]*" class="small-field" label="Number of bathrooms" required="true">
+                        <iron-icon icon="vaadin:lifebuoy" slot="prefix"></iron-icon>
+                    </vaadin-text-field>
+                </div>
+                <br>
+
+                <div style="display: flex; flex-direction: row; justify-content: space-between; width: inherit">
+                    <vaadin-text-field class="small-field" label="Country" required="true"></vaadin-text-field>
+                    <vaadin-text-field class="small-field" label="City" required="true"></vaadin-text-field>
+                    <vaadin-text-field class="small-field" label="Street" required="true"></vaadin-text-field>
+                </div>
+                <br>
+                <vaadin-text-field prevent-invalid-input pattern="[1-9][0-9]{0,6}" class="number-field" theme="align-right" label="Price per night" required="true">
+                    <div slot="suffix">CZK</div>
+                </vaadin-text-field>
+                <br>
+
+                <div style="margin-top: 2em">
+                    <span style="font-size: 20px; color: #484848; font-weight: 600;">Upload at least one photo of accommodation</span>
+                    <vaadin-upload style="margin-top: 10px" accept="image/jpeg,image/png">
+                        <span slot="drop-label">Drop photos here</span>
+                    </vaadin-upload>
+                </div>
+
+                <br>
+                <vaadin-button style="margin-top: 1em; display: flex;justify-content: center" theme="primary">Create</vaadin-button>
+        </div>
+    </template>
+
+    <script>
+        class NewAccommodationView extends Polymer.Element {
+            static get is() {
+                return 'new-accommodation-view'
+            }
+        }
+        customElements.define(NewAccommodationView.is, NewAccommodationView);
+    </script>
+
+</dom-module>

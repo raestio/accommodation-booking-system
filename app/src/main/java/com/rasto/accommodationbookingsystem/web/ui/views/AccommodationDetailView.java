@@ -23,6 +23,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -35,7 +36,7 @@ import java.util.Optional;
 @Route(value = "accommodations", layout = MainLayout.class)
 @Tag("accommodation-detail")
 @HtmlImport("src/views/accommodation-detail-view.html")
-public class AccommodationDetailView extends PolymerTemplate<TemplateModel> implements HasUrlParameter<Long>, HasLogger {
+public class AccommodationDetailView extends PolymerTemplate<TemplateModel> implements HasUrlParameter<Long>, HasDynamicTitle, HasLogger {
 
     private Long accommodationId;
 
@@ -170,4 +171,8 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
         return image;
     }
 
+    @Override
+    public String getPageTitle() {
+        return accommodationName != null ? accommodationName.getText() : "Accommodation";
+    }
 }
