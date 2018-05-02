@@ -4,9 +4,6 @@
 <link rel="import" href="../../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
-<link rel="import" href="../../bower_components/vaadin-dropdown-menu/vaadin-dropdown-menu.html">
-<link rel="import" href="../../bower_components/vaadin-item/vaadin-item.html">
-<link rel="import" href="../../bower_components/vaadin-list-box/vaadin-list-box.html">
 
 <dom-module id="new-accommodation-view">
     <template>
@@ -54,13 +51,7 @@
                     </vaadin-text-field>
                 </div>
                 <br>
-                <vaadin-dropdown-menu label="Accommodation type" required placeholder="Select type">
-                    <template>
-                        <vaadin-list-box>
 
-                        </vaadin-list-box>
-                    </template>
-                </vaadin-dropdown-menu>
                 <br>
                 <div style="display: flex; flex-direction: row; justify-content: space-between; width: inherit">
                     <vaadin-text-field id="country" prevent-invalid-input pattern="[a-zA-Z ]+" minlength="1" maxlength="255" class="small-field" label="Country" required="true"></vaadin-text-field>
