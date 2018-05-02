@@ -37,25 +37,25 @@
         <div class="new-accommodation-form">
             <span class="new-accommodation-title">Add new accommodation</span>
 
-                <vaadin-text-field label="Accommodation name" required="true" style="width: inherit"></vaadin-text-field>
+                <vaadin-text-field minlength="1" maxlength="255" label="Accommodation name" required="true" style="width: inherit"></vaadin-text-field>
                 <br>
                 <div style="display: flex; flex-direction: row; justify-content: space-between; width: inherit">
-                    <vaadin-text-field prevent-invalid-input pattern="[1-9][0-9]*" class="small-field" label="Number of guests" required="true" >
+                    <vaadin-text-field prevent-invalid-input pattern="[1-9][0-9]?" class="small-field" label="Number of guests" required="true" >
                         <iron-icon icon="vaadin:group" slot="prefix"></iron-icon>
                     </vaadin-text-field>
-                    <vaadin-text-field prevent-invalid-input pattern="[0-9]*" class="small-field" label="Number of beds" required="true">
+                    <vaadin-text-field prevent-invalid-input pattern="([0-9])|([1-9][0-9])" class="small-field" label="Number of beds" required="true">
                         <iron-icon icon="vaadin:bed" slot="prefix"></iron-icon>
                     </vaadin-text-field>
-                    <vaadin-text-field prevent-invalid-input pattern="[0-9]*" class="small-field" label="Number of bathrooms" required="true">
+                    <vaadin-text-field prevent-invalid-input pattern="([0-9])|([1-9][0-9])" class="small-field" label="Number of bathrooms" required="true">
                         <iron-icon icon="vaadin:lifebuoy" slot="prefix"></iron-icon>
                     </vaadin-text-field>
                 </div>
                 <br>
 
                 <div style="display: flex; flex-direction: row; justify-content: space-between; width: inherit">
-                    <vaadin-text-field class="small-field" label="Country" required="true"></vaadin-text-field>
-                    <vaadin-text-field class="small-field" label="City" required="true"></vaadin-text-field>
-                    <vaadin-text-field class="small-field" label="Street" required="true"></vaadin-text-field>
+                    <vaadin-text-field minlength="1" maxlength="255" class="small-field" label="Country" required="true"></vaadin-text-field>
+                    <vaadin-text-field minlength="1" maxlength="255" class="small-field" label="City" required="true"></vaadin-text-field>
+                    <vaadin-text-field minlength="1" maxlength="255" class="small-field" label="Street" required="true"></vaadin-text-field>
                 </div>
                 <br>
                 <vaadin-text-field prevent-invalid-input pattern="[1-9][0-9]{0,6}" class="number-field" theme="align-right" label="Price per night" required="true">
