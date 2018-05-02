@@ -30,14 +30,8 @@ public class AccommodationTypesServiceImpl implements AccommodationTypesService 
     }
 
     @Override
-    public Optional<AccommodationType> findById(Long id) {
-        Integer i;
-        try {
-            i = Math.toIntExact(id);
-        } catch (ArithmeticException e) {
-            return Optional.empty();
-        }
-        return accommodationTypeRepository.findById(i);
+    public Optional<AccommodationType> findById(Integer id) {
+        return accommodationTypeRepository.findById(id);
     }
 
     @Override
@@ -46,13 +40,8 @@ public class AccommodationTypesServiceImpl implements AccommodationTypesService 
     }
 
     @Override
-    public void delete(Long id) {
-        try {
-            Integer i = Math.toIntExact(id);
-            accommodationTypeRepository.deleteById(i);
-        } catch (ArithmeticException e) {
-            //do nothing -> number of accommodation types will never be more than 2^32
-        }
+    public void delete(Integer id) {
+        accommodationTypeRepository.deleteById(id);
     }
 
     @Override

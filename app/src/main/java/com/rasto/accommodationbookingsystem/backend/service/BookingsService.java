@@ -6,7 +6,7 @@ import com.rasto.accommodationbookingsystem.backend.exception.UserNotAuthenticat
 import java.time.LocalDate;
 import java.util.List;
 
-public interface BookingsService extends CrudService<Booking> {
+public interface BookingsService extends CrudService<Booking, Long> {
 
     List<LocalDate> getBookedDays(Long accommodationId);
 

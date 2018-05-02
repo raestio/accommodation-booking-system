@@ -4,7 +4,7 @@ import com.rasto.accommodationbookingsystem.backend.data.entity.User;
 
 import java.util.Optional;
 
-public interface UserService extends CrudService<User> {
+public interface UserService extends CrudService<User, Long> {
 
 	/**
 	 * Find user by email and return true if exists

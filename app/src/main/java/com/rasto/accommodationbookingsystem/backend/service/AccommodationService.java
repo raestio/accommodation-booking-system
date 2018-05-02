@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface AccommodationService extends CrudService<Accommodation> {
+public interface AccommodationService extends CrudService<Accommodation, Long> {
 
     /**
      * @return List of accommodations cards that are displayed on home page
