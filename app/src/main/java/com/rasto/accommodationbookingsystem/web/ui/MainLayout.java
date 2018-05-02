@@ -1,5 +1,6 @@
 package com.rasto.accommodationbookingsystem.web.ui;
 
+import com.rasto.accommodationbookingsystem.HasLogger;
 import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.components.SignUpDialog;
 import com.vaadin.flow.component.button.Button;
@@ -20,7 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @HtmlImport("frontend://styles/shared-styles.html")
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
 @Theme(Lumo.class)
-public class MainLayout extends Div implements RouterLayout, PageConfigurator, BeforeEnterObserver {
+public class MainLayout extends Div implements RouterLayout, PageConfigurator, BeforeEnterObserver, HasLogger {
 
     private final SignUpDialog signUpDialog;
     private final UserAuthenticationState userAuthenticationState;
@@ -29,6 +30,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     private Button login;
     private Button bookings;
     private Button logout;
+    private Button newAccommodation;
 
     @Autowired
     public MainLayout(SignUpDialog signUpDialog, UserAuthenticationState userAuthenticationState){
@@ -42,13 +44,25 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
         login = createLoginButton();
         logout = createLogoutButton();
         bookings = createBookingsButton();
+        newAccommodation = createNewAccommodationButton();
 
-        Div buttons = new Div(signUp, login, bookings, logout);
+        Div buttons = new Div(signUp, login, newAccommodation, bookings, logout);
         buttons.addClassName("main-layout__nav");
         Div header = new Div(title, buttons);
         header.addClassName("main-layout__header");
         add(header);
         addClassName("main-layout");
+    }
+
+    private Button createNewAccommodationButton() {
+        newAccommodation = new Button();
+        newAccommodation.setText("New accommodation");
+        newAccommodation.setClassName("main-layout__nav-item");
+        newAccommodation.setVisible(false);
+        newAccommodation.addClickListener(e -> {
+            getUI().ifPresent(ui -> ui.navigate("new-accommodation"));
+        });
+        return newAccommodation;
     }
 
     private Button createSignUpButton() {
@@ -119,11 +133,17 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
             signUp.setVisible(false);
             logout.setVisible(true);
             bookings.setVisible(true);
+            if (userAuthenticationState.isLoggedUserAdmin()) {
+                newAccommodation.setVisible(true);
+            } else {
+                newAccommodation.setVisible(false);
+            }
         } else {
             bookings.setVisible(false);
             login.setVisible(true);
             signUp.setVisible(true);
             logout.setVisible(false);
+            newAccommodation.setVisible(false);
         }
     }
 }
