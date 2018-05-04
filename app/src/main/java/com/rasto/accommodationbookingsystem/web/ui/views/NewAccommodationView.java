@@ -1,27 +1,27 @@
 package com.rasto.accommodationbookingsystem.web.ui.views;
 
+import com.cloudinary.utils.ObjectUtils;
 import com.rasto.accommodationbookingsystem.HasLogger;
 import com.rasto.accommodationbookingsystem.backend.data.AccommodationTypeEnum;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
 import com.rasto.accommodationbookingsystem.backend.data.entity.AccommodationType;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Address;
-import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
-import com.rasto.accommodationbookingsystem.backend.service.AccommodationTypesService;
-import com.rasto.accommodationbookingsystem.backend.service.AddressService;
+import com.rasto.accommodationbookingsystem.backend.service.*;
 import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.DropdownItem;
+import com.rasto.accommodationbookingsystem.web.ui.utils.PhotoReceiver;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasClickListeners;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MultiFileBuffer;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.Setter;
 import com.vaadin.flow.data.binder.StatusChangeListener;
@@ -33,6 +33,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -45,10 +46,13 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
 
     private final static String FIELD_EMPTY_ERROR_MESSAGE = "Field can not be empty";
     private final static int FIELD_MIN_LENGTH = 1;
+
     private final AccommodationTypesService accommodationTypesService;
     private final UserAuthenticationState userAuthenticationState;
     private final AccommodationService accommodationService;
     private final AddressService addressService;
+    private final ImageUploadService imageUploadService;
+    private final UtilityService utilityService;
 
     @Id("accommodationName")
     private TextField accommodationName;
@@ -90,14 +94,18 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
     private final Binder<AccommodationType> accommodationTypeBinder = new Binder<>(AccommodationType.class);
     private final Binder<Address> addressBinder = new Binder<>(Address.class);
     private AccommodationTypeEnum chosenAccommodationTypeEnum;
-    private MultiFileBuffer multiFileBuffer;
+    private PhotoReceiver photoReceiver;
 
     @Autowired
-    public NewAccommodationView(AccommodationService accommodationService, AccommodationTypesService accommodationTypesService, AddressService addressService, UserAuthenticationState userAuthenticationState) {
+    public NewAccommodationView(AccommodationService accommodationService, AccommodationTypesService accommodationTypesService,
+                                AddressService addressService, UserAuthenticationState userAuthenticationState,
+                                ImageUploadService imageUploadService, UtilityService utilityService) {
         this.userAuthenticationState = userAuthenticationState;
         this.accommodationTypesService = accommodationTypesService;
         this.accommodationService = accommodationService;
         this.addressService = addressService;
+        this.imageUploadService = imageUploadService;
+        this.utilityService = utilityService;
         accommodationName.setAutofocus(true);
         createButton.setEnabled(false);
         createButton.addClickListener(event -> createAccommodation());
@@ -106,12 +114,12 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
         types.forEach(type -> accommodationTypes.add(createDropdownItem(type)));
 
         bindForm();
-        initUpload();
+        initUploadComponent();
     }
 
-    private void initUpload() {
-        multiFileBuffer = new MultiFileBuffer();
-        upload.setReceiver(multiFileBuffer);
+    private void initUploadComponent() {
+        photoReceiver = new PhotoReceiver();
+        upload.setReceiver(photoReceiver);
         upload.addSucceededListener(event -> {
             if (isFormReady()) {
                 createButton.setEnabled(true);
@@ -203,18 +211,31 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
 
     private void createAccommodation() {
         if (isFormReady()) {
-            multiFileBuffer.getFiles().forEach(str -> getLogger().info(str));
+            photoReceiver.getFilesPaths().forEach(this::uploadImage);
         } else {
             createButton.setEnabled(false);
         }
     }
 
+    private void uploadImage(String filePath) {
+        String url = "";
+
+        try {
+            url = imageUploadService.upload(filePath, ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            Notification.show("Image upload error", 3000, Notification.Position.MIDDLE);
+            e.printStackTrace();
+        }
+
+        getLogger().info(url);
+    }
+
     private boolean isFormReadyWithoutValidation() {
-        return accommodationBinder.isValid() && accommodationTypeBinder.isValid() && addressBinder.isValid() && !multiFileBuffer.getFiles().isEmpty();
+        return accommodationBinder.isValid() && accommodationTypeBinder.isValid() && addressBinder.isValid() && !photoReceiver.getFilesPaths().isEmpty();
     }
 
     private boolean isFormReady() {
-        return accommodationBinder.validate().isOk() && accommodationTypeBinder.validate().isOk() && addressBinder.validate().isOk() && !multiFileBuffer.getFiles().isEmpty();
+        return accommodationBinder.validate().isOk() && accommodationTypeBinder.validate().isOk() && addressBinder.validate().isOk() && !photoReceiver.getFilesPaths().isEmpty();
     }
 
     @Override
