@@ -12,7 +12,6 @@ import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.DropdownItem;
 import com.rasto.accommodationbookingsystem.web.ui.utils.PhotoReceiver;
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasClickListeners;
 import com.vaadin.flow.component.Tag;
@@ -204,14 +203,14 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
 
     private void createAccommodation() {
         if (isFormReady()) {
-            //showProgressBar();
-
             Accommodation accommodation = accommodationBinder.getBean();
             AccommodationType type = accommodationTypeBinder.getBean();
             Address address = addressBinder.getBean();
 
             try {
+                showProgressBar(true); //TODO progress bar has to show immediately (before saving accommodation)
                 accommodationService.saveAccommodationWithPhotos(accommodation, type, address, photoReceiver.getFiles());
+                showProgressBar(false);
                 showOnSuccessfullyCreatedAccommodationNotification();
             } catch (IOException e) {
                 Notification.show("Uploading photos failed", 3000, Notification.Position.MIDDLE);
@@ -225,26 +224,14 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
         }
     }
 
-    private void showProgressBar() {
-        createButton.setEnabled(false);
-        ProgressBar progressBar = new ProgressBar();
-        progressBar.setIndeterminate(true);
-        progressBarDiv.add(progressBar);
-        progressBar.addAttachListener(new ComponentEventListener<AttachEvent>() {
-            @Override
-            public void onComponentEvent(AttachEvent event) {
-                try {
-                    accommodationService.saveAccommodationWithPhotos(accommodationBinder.getBean(), accommodationTypeBinder.getBean(), addressBinder.getBean(), photoReceiver.getFiles());
-                    showOnSuccessfullyCreatedAccommodationNotification();
-                } catch (IOException e) {
-                    Notification.show("Uploading photos failed", 3000, Notification.Position.MIDDLE);
-                    e.printStackTrace();
-                } catch (RuntimeException e) {
-                    Notification.show("Image size too large", 3000, Notification.Position.MIDDLE);
-                    e.printStackTrace();
-                }
-            }
-        });
+    private void showProgressBar(boolean show) {
+        if (show) {
+            ProgressBar progressBar = new ProgressBar();
+            progressBar.setIndeterminate(true);
+            progressBarDiv.add(progressBar);
+        } else {
+            progressBarDiv.setVisible(false);
+        }
     }
 
     private void showOnSuccessfullyCreatedAccommodationNotification() {
