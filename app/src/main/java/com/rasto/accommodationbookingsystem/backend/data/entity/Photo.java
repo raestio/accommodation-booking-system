@@ -19,6 +19,19 @@ public class Photo implements Serializable {
     @Size(max = 2048)
     private String url;
 
+    public Photo() {
+
+    }
+
+    public Photo(String url) {
+        this.url = url;
+    }
+
+    public Photo(String url, Accommodation accommodation) {
+        this.url = url;
+        this.accommodation = accommodation;
+    }
+
     @NotNull
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "fk_accommodation_id")

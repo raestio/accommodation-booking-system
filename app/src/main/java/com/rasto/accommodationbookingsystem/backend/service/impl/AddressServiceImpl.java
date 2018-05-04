@@ -48,4 +48,9 @@ public class AddressServiceImpl implements AddressService {
     public void delete(Address entity) {
         addressRepository.delete(entity);
     }
+
+    @Override
+    public Optional<Address> findByAddress(String country, String city, String street) {
+        return addressRepository.findByCountryAndCityAndStreet(country, city, street);
+    }
 }

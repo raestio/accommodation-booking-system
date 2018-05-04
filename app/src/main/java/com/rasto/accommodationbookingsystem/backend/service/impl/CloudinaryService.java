@@ -27,4 +27,9 @@ public class CloudinaryService implements ImageUploadService, HasLogger {
         Map result = cloudinary.uploader().upload(file, options);
         return result.get("url").toString();
     }
+
+    @Override
+    public String upload(Object file) throws IOException {
+        return upload(file, ObjectUtils.emptyMap());
+    }
 }

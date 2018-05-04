@@ -1,25 +1,30 @@
 package com.rasto.accommodationbookingsystem.web.ui.views;
 
-import com.cloudinary.utils.ObjectUtils;
 import com.rasto.accommodationbookingsystem.HasLogger;
 import com.rasto.accommodationbookingsystem.backend.data.AccommodationTypeEnum;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
 import com.rasto.accommodationbookingsystem.backend.data.entity.AccommodationType;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Address;
-import com.rasto.accommodationbookingsystem.backend.service.*;
+import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
+import com.rasto.accommodationbookingsystem.backend.service.AccommodationTypesService;
+import com.rasto.accommodationbookingsystem.backend.service.AddressService;
 import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.DropdownItem;
 import com.rasto.accommodationbookingsystem.web.ui.utils.PhotoReceiver;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasClickListeners;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.progressbar.ProgressBar;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.data.binder.Binder;
@@ -51,8 +56,9 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
     private final UserAuthenticationState userAuthenticationState;
     private final AccommodationService accommodationService;
     private final AddressService addressService;
-    private final ImageUploadService imageUploadService;
-    private final UtilityService utilityService;
+
+    @Id("progressBarDiv")
+    private Div progressBarDiv;
 
     @Id("accommodationName")
     private TextField accommodationName;
@@ -98,23 +104,11 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
 
     @Autowired
     public NewAccommodationView(AccommodationService accommodationService, AccommodationTypesService accommodationTypesService,
-                                AddressService addressService, UserAuthenticationState userAuthenticationState,
-                                ImageUploadService imageUploadService, UtilityService utilityService) {
+                                AddressService addressService, UserAuthenticationState userAuthenticationState) {
         this.userAuthenticationState = userAuthenticationState;
         this.accommodationTypesService = accommodationTypesService;
         this.accommodationService = accommodationService;
         this.addressService = addressService;
-        this.imageUploadService = imageUploadService;
-        this.utilityService = utilityService;
-        accommodationName.setAutofocus(true);
-        createButton.setEnabled(false);
-        createButton.addClickListener(event -> createAccommodation());
-
-        List<AccommodationType> types = accommodationTypesService.findAll();
-        types.forEach(type -> accommodationTypes.add(createDropdownItem(type)));
-
-        bindForm();
-        initUploadComponent();
     }
 
     private void initUploadComponent() {
@@ -196,7 +190,6 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
         addressBinder.addStatusChangeListener(statusChangeListener);
     }
 
-
     private void bindNumField(TextField numField, BiConsumer<Accommodation, Integer> method) {
         accommodationBinder.forField(numField)
                 .withValidator(new StringLengthValidator(
@@ -211,23 +204,59 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
 
     private void createAccommodation() {
         if (isFormReady()) {
-            photoReceiver.getFilesPaths().forEach(this::uploadImage);
+            //showProgressBar();
+
+            Accommodation accommodation = accommodationBinder.getBean();
+            AccommodationType type = accommodationTypeBinder.getBean();
+            Address address = addressBinder.getBean();
+
+            try {
+                accommodationService.saveAccommodationWithPhotos(accommodation, type, address, photoReceiver.getFiles());
+                showOnSuccessfullyCreatedAccommodationNotification();
+            } catch (IOException e) {
+                Notification.show("Uploading photos failed", 3000, Notification.Position.MIDDLE);
+                e.printStackTrace();
+            } catch (RuntimeException e) {
+                Notification.show("Image size too large", 3000, Notification.Position.MIDDLE);
+                e.printStackTrace();
+            }
         } else {
             createButton.setEnabled(false);
         }
     }
 
-    private void uploadImage(String filePath) {
-        String url = "";
+    private void showProgressBar() {
+        createButton.setEnabled(false);
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setIndeterminate(true);
+        progressBarDiv.add(progressBar);
+        progressBar.addAttachListener(new ComponentEventListener<AttachEvent>() {
+            @Override
+            public void onComponentEvent(AttachEvent event) {
+                try {
+                    accommodationService.saveAccommodationWithPhotos(accommodationBinder.getBean(), accommodationTypeBinder.getBean(), addressBinder.getBean(), photoReceiver.getFiles());
+                    showOnSuccessfullyCreatedAccommodationNotification();
+                } catch (IOException e) {
+                    Notification.show("Uploading photos failed", 3000, Notification.Position.MIDDLE);
+                    e.printStackTrace();
+                } catch (RuntimeException e) {
+                    Notification.show("Image size too large", 3000, Notification.Position.MIDDLE);
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-        try {
-            url = imageUploadService.upload(filePath, ObjectUtils.emptyMap());
-        } catch (IOException e) {
-            Notification.show("Image upload error", 3000, Notification.Position.MIDDLE);
-            e.printStackTrace();
-        }
-
-        getLogger().info(url);
+    private void showOnSuccessfullyCreatedAccommodationNotification() {
+        Label label = new Label("Accommodation successfully added");
+        Button button = new Button("OK");
+        Notification notification = new Notification(label, button);
+        button.addClickListener(e -> {
+            notification.close();
+            getUI().ifPresent(ui -> ui.getPage().reload());
+        });
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.open();
     }
 
     private boolean isFormReadyWithoutValidation() {
@@ -242,6 +271,17 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
     public void beforeEnter(BeforeEnterEvent event) {
         if (!userAuthenticationState.isLoggedUserAdmin()) {
             event.rerouteTo(AccommodationsView.class);
+            return;
         }
+
+        accommodationName.setAutofocus(true);
+        createButton.setEnabled(false);
+        createButton.addClickListener(ev -> createAccommodation());
+
+        List<AccommodationType> types = accommodationTypesService.findAll();
+        types.forEach(type -> accommodationTypes.add(createDropdownItem(type)));
+
+        bindForm();
+        initUploadComponent();
     }
 }

@@ -1,5 +1,6 @@
 package com.rasto.accommodationbookingsystem.backend.service.impl;
 
+import com.rasto.accommodationbookingsystem.backend.data.AccommodationTypeEnum;
 import com.rasto.accommodationbookingsystem.backend.data.entity.AccommodationType;
 import com.rasto.accommodationbookingsystem.backend.repository.AccommodationTypeRepository;
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationTypesService;
@@ -47,5 +48,10 @@ public class AccommodationTypesServiceImpl implements AccommodationTypesService 
     @Override
     public void delete(AccommodationType entity) {
         accommodationTypeRepository.delete(entity);
+    }
+
+    @Override
+    public Optional<AccommodationType> findByName(AccommodationTypeEnum name) {
+        return accommodationTypeRepository.findByName(name);
     }
 }
