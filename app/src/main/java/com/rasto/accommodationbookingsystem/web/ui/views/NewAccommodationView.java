@@ -33,8 +33,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -205,18 +203,10 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
 
     private void createAccommodation() {
         if (isFormReady()) {
-            getLogger().info("Yuiiiiiii");
             multiFileBuffer.getFiles().forEach(str -> getLogger().info(str));
-            InputStream inputStream = multiFileBuffer.getInputStream("asdas");
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            //inputStream.read()
         } else {
             createButton.setEnabled(false);
         }
-    }
-
-    private byte[] fromInputStreamToByteArray(InputStream inputStream) {
-        return null;
     }
 
     private boolean isFormReadyWithoutValidation() {
