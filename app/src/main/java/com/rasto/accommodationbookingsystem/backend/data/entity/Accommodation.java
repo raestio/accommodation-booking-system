@@ -46,6 +46,10 @@ public class Accommodation implements Serializable {
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
     private List<Booking> bookings;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
