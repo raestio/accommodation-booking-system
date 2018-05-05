@@ -10,6 +10,8 @@ import com.rasto.accommodationbookingsystem.backend.service.AccommodationTypesSe
 import com.rasto.accommodationbookingsystem.backend.service.AddressService;
 import com.rasto.accommodationbookingsystem.backend.service.PhotoService;
 import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationDTO;
+import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationTypeEnumDTO;
+import com.rasto.accommodationbookingsystem.backend.service.dto.AddressDTO;
 import com.rasto.accommodationbookingsystem.backend.service.dto.PhotoDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,10 +84,50 @@ public class AccommodationBookingSystemApplicationTests {
 		assertEquals(accommodation.getGuests(), accommodationDTO.getGuests());
 		assertEquals(accommodation.getName(), accommodationDTO.getName());
 		assertEquals(accommodation.getPricePerNight(), accommodationDTO.getPricePerNight());
-		assertEquals(accommodation.getType().getName().name(), accommodationDTO.getType().name());
+		assertEquals(accommodation.getType().getName().name(), accommodationDTO.getTypeName().name());
 		assertEquals(accommodation.getAddress().getCountry(), accommodationDTO.getAddress().getCountry());
 		assertEquals(accommodation.getAddress().getCity(), accommodationDTO.getAddress().getCity());
 		assertEquals(accommodation.getAddress().getStreet(), accommodationDTO.getAddress().getStreet());
 		assertThat(accommodation.getPhotos().stream().map(Photo::getUrl).collect(Collectors.toList()), is(accommodationDTO.getPhotos().stream().map(PhotoDTO::getUrl).collect(Collectors.toList())));
+	}
+
+	@Test
+	public void convertAccommodationDTOToAccommodationEntity() {
+		AccommodationDTO accommodationDTO = new AccommodationDTO();
+		accommodationDTO.setId(1L);
+		accommodationDTO.setName("Testing name");
+		accommodationDTO.setGuests(5);
+		accommodationDTO.setBeds(3);
+		accommodationDTO.setBathrooms(54);
+		accommodationDTO.setPricePerNight(BigDecimal.valueOf(123456));
+
+		AccommodationTypeEnumDTO accommodationType = AccommodationTypeEnumDTO.BUNGALOW;
+
+		AddressDTO address = new AddressDTO();
+		address.setCountry("Test country");
+		address.setCity("City");
+		address.setStreet("street");
+
+		accommodationDTO.setAddress(address);
+		accommodationDTO.setTypeName(accommodationType);
+
+		PhotoDTO photo1 = new PhotoDTO();
+		photo1.setUrl("url test 1");
+		PhotoDTO photo2 = new PhotoDTO();
+		photo2.setUrl("url test 2");
+		accommodationDTO.setPhotos(Stream.of(photo1, photo2).collect(Collectors.toList()));
+
+		Accommodation accommodation = modelMapper.map(accommodationDTO, Accommodation.class);
+		assertEquals(accommodationDTO.getId(), accommodation.getId());
+		assertEquals(accommodationDTO.getBathrooms(), accommodation.getBathrooms());
+		assertEquals(accommodationDTO.getBeds(), accommodation.getBeds());
+		assertEquals(accommodationDTO.getGuests(), accommodation.getGuests());
+		assertEquals(accommodationDTO.getName(), accommodation.getName());
+		assertEquals(accommodationDTO.getPricePerNight(), accommodation.getPricePerNight());
+		assertEquals(accommodationDTO.getTypeName().name(), accommodation.getType().getName().name());
+		assertEquals(accommodationDTO.getAddress().getCountry(), accommodation.getAddress().getCountry());
+		assertEquals(accommodationDTO.getAddress().getCity(), accommodation.getAddress().getCity());
+		assertEquals(accommodationDTO.getAddress().getStreet(), accommodation.getAddress().getStreet());
+		assertThat(accommodationDTO.getPhotos().stream().map(PhotoDTO::getUrl).collect(Collectors.toList()), is(accommodation.getPhotos().stream().map(Photo::getUrl).collect(Collectors.toList())));
 	}
 }

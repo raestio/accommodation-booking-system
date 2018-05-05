@@ -12,7 +12,7 @@ public class AccommodationDTO implements Serializable {
     private int guests;
     private int beds;
     private int bathrooms;
-    private AccommodationTypeEnumDTO type;
+    private AccommodationTypeEnumDTO typeName;
     private AddressDTO address;
     private Collection<PhotoDTO> photos;
 
@@ -64,12 +64,12 @@ public class AccommodationDTO implements Serializable {
         this.bathrooms = bathrooms;
     }
 
-    public AccommodationTypeEnumDTO getType() {
-        return type;
+    public AccommodationTypeEnumDTO getTypeName() {
+        return typeName;
     }
 
     public void setTypeName(AccommodationTypeEnumDTO type) {
-        this.type = type;
+        this.typeName = type;
     }
 
     public AddressDTO getAddress() {
