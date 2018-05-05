@@ -11,8 +11,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
-public interface AccommodationService extends CrudService<Accommodation, Long> {
+public interface AccommodationService extends FilterableCrudService<Accommodation, Long> {
 
     /**
      * @return List of accommodations that are displayed on home page
@@ -38,4 +39,6 @@ public interface AccommodationService extends CrudService<Accommodation, Long> {
      * @throws IOException if uploading images failed
      */
     Accommodation saveAccommodationWithPhotos(Accommodation accommodation, AccommodationType type, Address address, List<File> photos) throws IOException;
+
+    List<AccommodationCardDTO> findAnyMatchingAccommodationsCards(Optional<String> filter);
 }

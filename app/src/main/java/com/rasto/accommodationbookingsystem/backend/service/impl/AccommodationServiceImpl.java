@@ -116,4 +116,20 @@ public class AccommodationServiceImpl implements AccommodationService {
     public void delete(Accommodation entity) {
         accommodationRepository.delete(entity);
     }
+
+    @Override
+    public List<Accommodation> findAnyMatching(Optional<String> filter) {
+        if (filter.isPresent()) {
+            String filt = "%" + filter.get() + "%";
+            return accommodationRepository.findByCountryOrCityLikeIgnoreCase(filt);
+        } else {
+            return findAll();
+        }
+    }
+
+    @Override
+    public List<AccommodationCardDTO> findAnyMatchingAccommodationsCards(Optional<String> filter) {
+        List<Accommodation> accommodations = findAnyMatching(filter);
+        return accommodations.stream().map(AccommodationCardDTO::create).collect(Collectors.toList());
+    }
 }

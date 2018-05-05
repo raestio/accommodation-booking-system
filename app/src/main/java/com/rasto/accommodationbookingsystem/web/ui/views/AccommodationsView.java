@@ -6,16 +6,20 @@ import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationCar
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.AccommodationCard;
 import com.rasto.accommodationbookingsystem.web.ui.components.BoardLayout;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Route(value = "", layout = MainLayout.class)
@@ -23,6 +27,9 @@ import java.util.stream.Collectors;
 @Tag("accommodations-view")
 @HtmlImport("src/views/accommodations-view.html")
 public class AccommodationsView extends PolymerTemplate<TemplateModel> implements HasLogger {
+
+    @Id("searchField")
+    private TextField searchField;
 
     @Id("accommodationsBoardLayout")
     private BoardLayout accommodationsBoardLayout;
@@ -33,11 +40,20 @@ public class AccommodationsView extends PolymerTemplate<TemplateModel> implement
     public AccommodationsView(AccommodationService accommodationService) {
         this.accommodationService = accommodationService;
         accommodationsBoardLayout.setComponentsCountInRow(3);
-        initAccommodationsCards();
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        searchField.addValueChangeListener((HasValue.ValueChangeListener<TextField, String>) event -> updateView());
+
+        initAccommodationsCards(accommodationService.findAllAccommodationsCards());
     }
 
-    private void initAccommodationsCards() {
-        List<AccommodationCardDTO> accommodationCards = accommodationService.findAllAccommodationsCards();
+    private void updateView() {
+        String filter = searchField.getValue();
+        List<AccommodationCardDTO> accommodationCardDTOS = accommodationService.findAnyMatchingAccommodationsCards(filter.isEmpty() ? Optional.empty() : Optional.of(filter));
+        accommodationsBoardLayout.clear();
+        initAccommodationsCards(accommodationCardDTOS);
+    }
+
+    private void initAccommodationsCards(List<AccommodationCardDTO> accommodationCards) {
         List<AccommodationCard> cardList = accommodationCards.stream().map(this::createAccommodationCard).collect(Collectors.toList());
         cardList.forEach(card -> accommodationsBoardLayout.add(card));
     }

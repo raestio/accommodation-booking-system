@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-icons/vaadin-icons.html"><
 <link rel="import" href="../components/board-layout.html">
 
 
@@ -7,6 +9,12 @@
         <style include="view-styles">
 
         </style>
+
+        <div class="view-toolbar">
+            <vaadin-text-field id="searchField" placeholder="Try 'Cyprus' or 'Barcelona'" class="view-toolbar__search-field">
+                <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
+            </vaadin-text-field>
+        </div>
 
         <div>
             <board-layout id="accommodationsBoardLayout"></board-layout>

@@ -48,4 +48,9 @@ public class BoardLayout extends PolymerTemplate<TemplateModel> {
     public void setJustifyContentMode(FlexComponent.JustifyContentMode justifyContentMode) {
         this.justifyContentMode = justifyContentMode;
     }
+
+    public void clear() {
+        componentsCount = 0;
+        verticalLayout.removeAll();
+    }
 }
