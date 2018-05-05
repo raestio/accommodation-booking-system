@@ -116,6 +116,12 @@
 			<artifactId>cloudinary-taglib</artifactId>
 			<version>1.18.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>LATEST</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

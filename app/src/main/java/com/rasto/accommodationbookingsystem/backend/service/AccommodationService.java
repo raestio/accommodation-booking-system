@@ -5,6 +5,7 @@ import com.rasto.accommodationbookingsystem.backend.data.entity.AccommodationTyp
 import com.rasto.accommodationbookingsystem.backend.data.entity.Address;
 import com.rasto.accommodationbookingsystem.backend.exception.AccommodationNotFoundException;
 import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationCardDTO;
+import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,4 +42,6 @@ public interface AccommodationService extends FilterableCrudService<Accommodatio
     Accommodation saveAccommodationWithPhotos(Accommodation accommodation, AccommodationType type, Address address, List<File> photos) throws IOException;
 
     List<AccommodationCardDTO> findAnyMatchingAccommodationsCards(Optional<String> filter);
+
+    List<AccommodationDTO> findAllAndConvertToDTO();
 }

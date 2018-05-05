@@ -8,6 +8,8 @@ import com.rasto.accommodationbookingsystem.backend.exception.AccommodationNotFo
 import com.rasto.accommodationbookingsystem.backend.repository.AccommodationRepository;
 import com.rasto.accommodationbookingsystem.backend.service.*;
 import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationCardDTO;
+import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,16 +31,17 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final ImageUploadService imageUploadService;
     private final PhotoService photoService;
     private final AddressService addressService;
+    private final AccommodationTypesService accommodationTypesService;
+
+    private ModelMapper modelMapper;
 
     @Autowired
-    private AccommodationTypesService accommodationTypesService;
-
-    @Autowired
-    public AccommodationServiceImpl(AccommodationRepository accommodationRepository, ImageUploadService imageUploadService, PhotoService photoService, AddressService addressService) {
+    public AccommodationServiceImpl(AccommodationRepository accommodationRepository, ImageUploadService imageUploadService, PhotoService photoService, AddressService addressService, AccommodationTypesService accommodationTypesService) {
         this.accommodationRepository = accommodationRepository;
         this.imageUploadService = imageUploadService;
         this.photoService = photoService;
         this.addressService = addressService;
+        this.accommodationTypesService = accommodationTypesService;
     }
 
     @Override
@@ -131,5 +134,20 @@ public class AccommodationServiceImpl implements AccommodationService {
     public List<AccommodationCardDTO> findAnyMatchingAccommodationsCards(Optional<String> filter) {
         List<Accommodation> accommodations = findAnyMatching(filter);
         return accommodations.stream().map(AccommodationCardDTO::create).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AccommodationDTO> findAllAndConvertToDTO() {
+        List<Accommodation> accommodations = findAll();
+        return accommodations.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
+
+    private AccommodationDTO convertToDTO(Accommodation accommodation) {
+        return modelMapper.map(accommodation, AccommodationDTO.class);
     }
 }
