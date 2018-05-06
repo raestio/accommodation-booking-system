@@ -5,17 +5,10 @@ import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
 import com.rasto.accommodationbookingsystem.backend.data.entity.AccommodationType;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Address;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Photo;
-import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
-import com.rasto.accommodationbookingsystem.backend.service.AccommodationTypesService;
-import com.rasto.accommodationbookingsystem.backend.service.AddressService;
-import com.rasto.accommodationbookingsystem.backend.service.PhotoService;
-import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationDTO;
-import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationTypeEnumDTO;
-import com.rasto.accommodationbookingsystem.backend.service.dto.AddressDTO;
-import com.rasto.accommodationbookingsystem.backend.service.dto.PhotoDTO;
+import com.rasto.accommodationbookingsystem.backend.service.*;
+import com.rasto.accommodationbookingsystem.backend.service.dto.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -34,7 +27,7 @@ import static org.junit.Assert.assertThat;
 public class AccommodationBookingSystemApplicationTests {
 
 	@Autowired
-	private ModelMapper modelMapper;
+	private ConvertingService convertingService;
 
 	@Autowired
 	private AccommodationService accommodationService;
@@ -77,7 +70,7 @@ public class AccommodationBookingSystemApplicationTests {
 		Photo photo2 = photoService.createNew("tmp url2");
 		accommodation.setPhotos(Stream.of(photo1, photo2).collect(Collectors.toList()));
 
-		AccommodationDTO accommodationDTO = modelMapper.map(accommodation, AccommodationDTO.class);
+		AccommodationDTO accommodationDTO = convertingService.convert(accommodation, AccommodationDTO.class);
 		assertEquals(accommodation.getId(), accommodationDTO.getId());
 		assertEquals(accommodation.getBathrooms(), accommodationDTO.getBathrooms());
 		assertEquals(accommodation.getBeds(), accommodationDTO.getBeds());
@@ -117,7 +110,7 @@ public class AccommodationBookingSystemApplicationTests {
 		photo2.setUrl("url test 2");
 		accommodationDTO.setPhotos(Stream.of(photo1, photo2).collect(Collectors.toList()));
 
-		Accommodation accommodation = modelMapper.map(accommodationDTO, Accommodation.class);
+		Accommodation accommodation = convertingService.convert(accommodationDTO, Accommodation.class);
 		assertEquals(accommodationDTO.getId(), accommodation.getId());
 		assertEquals(accommodationDTO.getBathrooms(), accommodation.getBathrooms());
 		assertEquals(accommodationDTO.getBeds(), accommodation.getBeds());
@@ -129,5 +122,38 @@ public class AccommodationBookingSystemApplicationTests {
 		assertEquals(accommodationDTO.getAddress().getCity(), accommodation.getAddress().getCity());
 		assertEquals(accommodationDTO.getAddress().getStreet(), accommodation.getAddress().getStreet());
 		assertThat(accommodationDTO.getPhotos().stream().map(PhotoDTO::getUrl).collect(Collectors.toList()), is(accommodation.getPhotos().stream().map(Photo::getUrl).collect(Collectors.toList())));
+	}
+
+	@Test
+	public void convertAccommodationEntityToAccommodationCardDTO() {
+		Accommodation accommodation = accommodationService.createNew();
+		accommodation.setId(1L);
+		accommodation.setName("Testing name");
+		accommodation.setGuests(5);
+		accommodation.setBeds(3);
+		accommodation.setBathrooms(54);
+		accommodation.setPricePerNight(BigDecimal.valueOf(123456));
+
+		AccommodationType accommodationType = accommodationTypesService.createNew();
+		accommodationType.setName(AccommodationTypeEnum.BUNGALOW);
+
+		Address address = addressService.createNew();
+		address.setCountry("Test country");
+		address.setCity("City");
+		address.setStreet("street");
+
+		accommodation.setAddress(address);
+		accommodation.setType(accommodationType);
+
+		Photo photo1 = photoService.createNew("tmp url");
+		Photo photo2 = photoService.createNew("tmp url2");
+		accommodation.setPhotos(Stream.of(photo1, photo2).collect(Collectors.toList()));
+
+
+		AccommodationCardDTO cardDTO = convertingService.convertToAccommodationCardDTO(accommodation);
+		assertEquals(accommodation.getId(), cardDTO.getId());
+		assertEquals(accommodation.getName(), cardDTO.getName());
+		assertEquals(accommodation.getPricePerNight(), cardDTO.getPricePerNight());
+		assertEquals(accommodation.getPhotos().get(0).getUrl(), cardDTO.getPhoto().getUrl());
 	}
 }

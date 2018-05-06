@@ -63,7 +63,7 @@ public class AccommodationsView extends PolymerTemplate<TemplateModel> implement
         accommodationCard.setAccommodationId(accommodationCardDTO.getId());
         accommodationCard.setName(accommodationCardDTO.getName());
         accommodationCard.setPricePerNight(accommodationCardDTO.getPricePerNight());
-        accommodationCard.setPhoto(accommodationCardDTO.getMainPhotoUrl());
+        accommodationCard.setPhoto(accommodationCardDTO.getPhoto().getUrl());
         accommodationCard.addClickListener(event -> event.getSource().getUI().ifPresent(ui -> ui.navigate("accommodations/" + event.getSource().getAccommodationId())));
         return accommodationCard;
     }

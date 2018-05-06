@@ -1,8 +1,5 @@
 package com.rasto.accommodationbookingsystem.backend.service.dto;
 
-import com.rasto.accommodationbookingsystem.backend.data.entity.Accommodation;
-
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -14,16 +11,7 @@ public class AccommodationCardDTO implements Serializable {
     private Long id;
     private String name;
     private BigDecimal pricePerNight;
-    private String mainPhotoUrl;
-
-    public static AccommodationCardDTO create(@NotNull Accommodation accommodation) {
-        AccommodationCardDTO card = new AccommodationCardDTO();
-        card.id = accommodation.getId();
-        card.name = accommodation.getName();
-        card.pricePerNight = accommodation.getPricePerNight();
-        card.mainPhotoUrl = accommodation.getPhotos().get(0).getUrl();
-        return card;
-    }
+    private PhotoDTO photo;
 
     public Long getId() {
         return id;
@@ -49,11 +37,11 @@ public class AccommodationCardDTO implements Serializable {
         this.pricePerNight = pricePerNight;
     }
 
-    public String getMainPhotoUrl() {
-        return mainPhotoUrl;
+    public PhotoDTO getPhoto() {
+        return photo;
     }
 
-    public void setMainPhotoUrl(String mainPhotoUrl) {
-        this.mainPhotoUrl = mainPhotoUrl;
+    public void setPhoto(PhotoDTO photo) {
+        this.photo = photo;
     }
 }
