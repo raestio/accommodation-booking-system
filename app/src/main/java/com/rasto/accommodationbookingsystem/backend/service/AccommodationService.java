@@ -44,4 +44,6 @@ public interface AccommodationService extends FilterableCrudService<Accommodatio
     List<AccommodationCardDTO> findAnyMatchingAccommodationsCards(Optional<String> filter);
 
     List<AccommodationDTO> findAllAndConvertToDTO();
+
+    Optional<AccommodationDTO> findByIdAndConvertToDTO(Long id);
 }

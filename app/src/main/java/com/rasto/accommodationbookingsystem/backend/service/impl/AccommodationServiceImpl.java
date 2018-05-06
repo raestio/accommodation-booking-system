@@ -142,6 +142,13 @@ public class AccommodationServiceImpl implements AccommodationService {
         return accommodations.stream().map(accommodation -> convertingService.convert(accommodation, AccommodationDTO.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public Optional<AccommodationDTO> findByIdAndConvertToDTO(Long id) {
+        Optional<Accommodation> optionalAccommodation = findById(id);
+        return optionalAccommodation.map(accommodation -> convertingService.convert(accommodation, AccommodationDTO.class));
+
+    }
+
     @Autowired
     public void setConvertingService(ConvertingService convertingService) {
         this.convertingService = convertingService;
