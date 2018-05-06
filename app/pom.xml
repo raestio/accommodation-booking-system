@@ -5,7 +5,7 @@
 
 	<groupId>com.rasto</groupId>
 	<artifactId>accommodation-booking-system</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0.beta</version>
 	<packaging>jar</packaging>
 
 	<name>accommodation-booking-system</name>
