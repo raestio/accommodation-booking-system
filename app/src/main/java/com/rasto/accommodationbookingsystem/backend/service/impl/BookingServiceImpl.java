@@ -9,6 +9,7 @@ import com.rasto.accommodationbookingsystem.backend.service.BookingsService;
 import com.rasto.accommodationbookingsystem.backend.service.UserService;
 import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +60,7 @@ public class BookingServiceImpl implements BookingsService, HasLogger {
     }
 
     @Override
-    public void bookAccommodation(Booking booking, Long accommodationId, Long userId) throws UserNotAuthenticatedException {
+    public void bookAccommodation(Booking booking, Long accommodationId, Long userId) throws UserNotAuthenticatedException, DataIntegrityViolationException {
         if (userAuthenticationState.isAuthenticated() && userAuthenticationState.getUserId().equals(userId)) {
             booking.setAccommodation(accommodationService.findById(accommodationId).get());
             booking.setUser(userService.findById(userId).get());

@@ -28,6 +28,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -100,23 +101,27 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
             }
         });
 
-        bookingForm.setOnBookButtonClickListener((checkIn, checkOut) -> {
-            if (userAuthenticationState.isAuthenticated()) {
-                Booking booking = bookingsService.createNew();
-                booking.setCheckIn(checkIn);
-                booking.setCheckOut(checkOut);
-                booking.setPrice(bookingForm.getTotalPrice());
-                try {
-                    bookingsService.bookAccommodation(booking, accommodationId, userAuthenticationState.getUserId());
-                    showOnSuccessfullyBookedNotification();
-                } catch (UserNotAuthenticatedException e) {
-                    Notification.show(e.getMessage(), 5000, Notification.Position.MIDDLE);
-                }
+        bookingForm.setOnBookButtonClickListener(this::bookAccommodation);
+    }
 
-            } else {
-                Notification.show("If you want to book this accommodation you have to log in or sign up.", 5000, Notification.Position.MIDDLE);
+    private void bookAccommodation(LocalDate checkIn, LocalDate checkOut) {
+        if (userAuthenticationState.isAuthenticated()) {
+            Booking booking = bookingsService.createNew();
+            booking.setCheckIn(checkIn);
+            booking.setCheckOut(checkOut);
+            booking.setPrice(bookingForm.getTotalPrice());
+            try {
+                bookingsService.bookAccommodation(booking, accommodationId, userAuthenticationState.getUserId());
+                showOnSuccessfullyBookedNotification();
+            } catch (DataIntegrityViolationException e) {
+                Notification.show("Accommodation is already booked", 5000, Notification.Position.MIDDLE);
+            } catch (UserNotAuthenticatedException e) {
+                Notification.show(e.getMessage(), 5000, Notification.Position.MIDDLE);
             }
-        });
+
+        } else {
+            Notification.show("If you want to book this accommodation you have to log in or sign up.", 5000, Notification.Position.MIDDLE);
+        }
     }
 
     private void showOnSuccessfullyBookedNotification() {

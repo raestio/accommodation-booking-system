@@ -37,6 +37,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -100,6 +101,7 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
     private final Binder<Address> addressBinder = new Binder<>(Address.class);
     private AccommodationTypeEnum chosenAccommodationTypeEnum;
     private PhotoReceiver photoReceiver;
+    private boolean createYesButtonClicked;
 
     @Autowired
     public NewAccommodationView(AccommodationService accommodationService, AccommodationTypesService accommodationTypesService,
@@ -202,23 +204,12 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
     }
 
     private void createAccommodation() {
+        createYesButtonClicked = false;
         if (isFormReady()) {
             Accommodation accommodation = accommodationBinder.getBean();
             AccommodationType type = accommodationTypeBinder.getBean();
             Address address = addressBinder.getBean();
-
-            try {
-                showProgressBar(true); //TODO progress bar has to show immediately (before saving accommodation)
-                accommodationService.saveAccommodationWithPhotos(accommodation, type, address, photoReceiver.getFiles());
-                showProgressBar(false);
-                showOnSuccessfullyCreatedAccommodationNotification();
-            } catch (IOException e) {
-                Notification.show("Uploading photos failed", 3000, Notification.Position.MIDDLE);
-                e.printStackTrace();
-            } catch (RuntimeException e) {
-                Notification.show("Image size too large", 3000, Notification.Position.MIDDLE);
-                e.printStackTrace();
-            }
+            showCreateConfirmNotification(accommodation, type, address, photoReceiver.getFiles());
         } else {
             createButton.setEnabled(false);
         }
@@ -232,6 +223,49 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
         } else {
             progressBarDiv.setVisible(false);
         }
+    }
+
+    private void showCreateConfirmNotification(Accommodation accommodation, AccommodationType type, Address address, List<File> files) {
+        Label label = new Label("Are you sure you want to create the accommodation with these properties?");
+        Button yes = getYesButton();
+        Button no = getNoButton();
+
+        Notification notification = new Notification(label, new Div(yes, no));
+        yes.addClickListener(e -> {
+            if (!createYesButtonClicked) {
+                createYesButtonClicked = true;
+                showProgressBar(true); //TODO progress bar has to show immediately
+                try {
+                    accommodationService.saveAccommodationWithPhotos(accommodation, type, address, files);
+                    notification.close();
+                    showOnSuccessfullyCreatedAccommodationNotification();
+                } catch (IOException | RuntimeException exc) {
+                    notification.close();
+                    Notification.show("Uploading photos failed", 3000, Notification.Position.MIDDLE);
+                    exc.printStackTrace();
+                }
+                showProgressBar(false);
+            }
+        });
+
+        no.addClickListener(e -> {
+            notification.close();
+            showProgressBar(false);
+        });
+
+        showProgressBar(true);
+        notification.setPosition(Notification.Position.MIDDLE);
+        notification.open();
+    }
+
+    private Button getNoButton() {
+        return new Button("No");
+    }
+
+    private Button getYesButton() {
+        Button button = new Button("Yes");
+        button.getElement().setAttribute("theme", "primary");
+        return button;
     }
 
     private void showOnSuccessfullyCreatedAccommodationNotification() {
