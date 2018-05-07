@@ -37,7 +37,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
         this.signUpDialog = signUpDialog;
         this.userAuthenticationState = userAuthenticationState;
         H2 title = new H2("Airbnb");
-        title.addClassName("main-layout__title");
+        title.addClassName("main-layout-title");
 
 
         signUp = createSignUpButton();
@@ -47,9 +47,9 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
         newAccommodation = createNewAccommodationButton();
 
         Div buttons = new Div(signUp, login, newAccommodation, bookings, logout);
-        buttons.addClassName("main-layout__nav");
+        buttons.addClassName("main-layout-nav");
         Div header = new Div(title, buttons);
-        header.addClassName("main-layout__header");
+        header.addClassName("main-layout-header");
         add(header);
         addClassName("main-layout");
     }
@@ -57,7 +57,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     private Button createNewAccommodationButton() {
         newAccommodation = new Button();
         newAccommodation.setText("New accommodation");
-        newAccommodation.setClassName("main-layout__nav-item");
+        newAccommodation.setClassName("main-layout-item");
         newAccommodation.setVisible(false);
         newAccommodation.addClickListener(e -> {
             getUI().ifPresent(ui -> ui.navigate("new-accommodation"));
@@ -68,7 +68,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     private Button createSignUpButton() {
         signUp = new Button();
         signUp.setText("Sign Up");
-        signUp.setClassName("main-layout__nav-item");
+        signUp.setClassName("main-layout-item");
         signUp.setVisible(false);
         signUp.addClickListener(e -> signUp());
         return signUp;
@@ -77,7 +77,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     private Button createLoginButton() {
         login = new Button();
         login.setText("Log In");
-        login.setClassName("main-layout__nav-item");
+        login.setClassName("main-layout-item");
         login.setVisible(false);
         login.addClickListener(e -> login());
         return login;
@@ -86,7 +86,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     private Button createLogoutButton() {
         logout = new Button();
         logout.setText("Log Out");
-        logout.setClassName("main-layout__nav-item");
+        logout.setClassName("main-layout-item");
         logout.setVisible(false);
         logout.addClickListener(e -> logout());
         return logout;
@@ -95,7 +95,7 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     private Button createBookingsButton() {
         bookings = new Button();
         bookings.setText("Bookings");
-        bookings.setClassName("main-layout__nav-item");
+        bookings.setClassName("main-layout-item");
         bookings.setVisible(false);
         bookings.addClickListener(e -> {
             getUI().ifPresent(ui -> ui.navigate("bookings"));

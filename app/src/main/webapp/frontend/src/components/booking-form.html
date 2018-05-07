@@ -10,65 +10,65 @@
     <template>
         <style include="view-styles">
 
-            .booking_form {
+            .booking-form {
                 width: 20em;
                 height: 22em;
-                padding-left: 24px !important;
-                padding-right: 24px !important;
-                margin: 0px !important;
-                border: 1px solid #e4e4e4 !important;
-                background-color: #ffffff !important;
+                padding-left: 24px;
+                padding-right: 24px;
+                margin: 0px;
+                border: 1px solid #e4e4e4;
+                background-color: #ffffff;
             }
 
             .delimiter {
-                border-bottom: 1px solid #DBDBDB !important;
+                border-bottom: 1px solid #DBDBDB;
             }
 
-            .book_button {
-                cursor: pointer !important;
-                transition: background 0.2s, border-color 0.2s !important;
-                border-radius: 4px !important;
-                width: 100% !important;
-                border-width: 2px !important;
+            .book-button {
+                cursor: pointer;
+                transition: background 0.2s, border-color 0.2s;
+                border-radius: 4px;
+                width: 100%;
+                border-width: 2px;
                 margin-top: 1em;
-                border-color: transparent !important;
+                border-color: transparent;
             }
+
             .price {
-                margin: 0px !important;
-                word-wrap: break-word !important;
-                font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif !important;
-                font-size: 22px !important;
-                letter-spacing: -0.2px !important;
-                padding-top: 0px !important;
-                padding-bottom: 0px !important;
-                color: #484848 !important;
-                font-weight: 700 !important;
-                display: inline !important;
+                margin: 0px;
+                word-wrap: break-word;
+                font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif;
+                font-size: 22px;
+                letter-spacing: -0.2px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+                color: #484848;
+                font-weight: 700;
+                display: inline;
             }
 
             .total {
-                display: table !important;
-                width: 100% !important;
+                display: table;
+                width: 100%;
                 color: #484848;
-                font-size: 20px !important;
+                font-size: 20px;
                 margin-top: 1em;
             }
 
-            .total_text {
-                display: table-cell !important;
+            .total-text {
+                display: table-cell;
                 width: 50%;
-                vertical-align: middle !important;
+                vertical-align: middle;
             }
 
-            .total_price {
-                display: table-cell !important;
-                vertical-align: middle !important;
+            .total-price {
+                display: table-cell;
+                vertical-align: middle;
             }
         </style>
 
-        <vaadin-form-layout id="form" class="booking_form">
+        <vaadin-form-layout id="form" class="booking-form">
             <div style="margin-top:16px;margin-bottom:24px">
-
 
                 <div>
                     <span class="price">
@@ -90,13 +90,12 @@
                     </template>
                 </range-datepicker-input>
 
-
                 <div class="total">
-                    <div class="total_text"><span id="totalTextSpan">Total</span></div>
-                    <div class="total_price"><span id="totalPriceSpan"></span></div>
+                    <div class="total-text"><span id="totalTextSpan">Total</span></div>
+                    <div class="total-price"><span id="totalPriceSpan"></span></div>
                 </div>
 
-                <vaadin-button id="book" class="book_button" theme="primary">
+                <vaadin-button id="book" class="book-button" theme="primary">
                     <span>Book</span>
                 </vaadin-button>
 
