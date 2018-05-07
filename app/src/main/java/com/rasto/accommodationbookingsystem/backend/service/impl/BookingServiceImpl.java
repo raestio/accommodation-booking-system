@@ -95,6 +95,7 @@ public class BookingServiceImpl implements BookingsService, HasLogger {
     }
 
     @Override
+    @Transactional
     public Booking saveOrUpdate(Booking entity) {
         return bookingRepository.saveAndFlush(entity);
     }

@@ -6,6 +6,7 @@ import com.rasto.accommodationbookingsystem.backend.repository.AccommodationType
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationTypesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,16 +37,19 @@ public class AccommodationTypesServiceImpl implements AccommodationTypesService 
     }
 
     @Override
+    @Transactional
     public AccommodationType saveOrUpdate(AccommodationType entity) {
         return accommodationTypeRepository.saveAndFlush(entity);
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         accommodationTypeRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void delete(AccommodationType entity) {
         accommodationTypeRepository.delete(entity);
     }
