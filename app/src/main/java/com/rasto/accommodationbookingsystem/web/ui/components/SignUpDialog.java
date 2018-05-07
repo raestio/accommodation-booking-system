@@ -45,7 +45,6 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
     }
 
     private void bindUser() {
-        binder.setBean(userService.createNew());
         binder.forField(emailTextField)
                 .withValidator(new EmailValidator(EMAIL_VALIDATOR_MESSAGE))
                 .withValidator(email -> !userService.exists(email), USER_ALREADY_EXISTS)
@@ -128,5 +127,11 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
         emailTextField.setLabel(EMAIL_LOGIN);
         emailTextField.setRequired(true);
         getFormLayout().add(emailTextField);
+    }
+
+    @Override
+    public void open() {
+        binder.setBean(userService.createNew());
+        super.open();
     }
 }
