@@ -20,6 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import static com.rasto.accommodationbookingsystem.backend.constant.Constants.LOGIN_ERROR_MESSAGE;
+import static com.rasto.accommodationbookingsystem.backend.constant.Constants.NOTIFICATION_DURATION_MS;
+
 @Route(value = "login", layout = MainLayout.class)
 @Tag("login-view")
 @HtmlImport("src/views/login-view.html")
@@ -51,8 +54,7 @@ public class LoginView extends PolymerTemplate<TemplateModel> implements HasLogg
             SecurityContextHolder.getContext().setAuthentication(authenticated);
             getUI().ifPresent(ui -> ui.navigate(""));
         } catch (AuthenticationException ex) {
-            String message = "Incorrect email or password";
-            Notification.show(message, 3000, Notification.Position.MIDDLE);
+            Notification.show(LOGIN_ERROR_MESSAGE, NOTIFICATION_DURATION_MS, Notification.Position.MIDDLE);
         }
     }
 

@@ -11,13 +11,12 @@ import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.BoardLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.BookingForm;
+import com.rasto.accommodationbookingsystem.web.ui.utils.NotificationUtils;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -35,6 +34,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static com.rasto.accommodationbookingsystem.backend.constant.Constants.*;
+import static com.rasto.accommodationbookingsystem.backend.constant.MappingURLConstants.HOME;
 
 @Route(value = "accommodations", layout = MainLayout.class)
 @Tag("accommodation-detail")
@@ -77,6 +79,9 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
     private final BookingsService bookingsService;
     private final UserAuthenticationState userAuthenticationState;
 
+    private final static int LAST_N_DAYS_TO_DISABLE = 360;
+    private final static String CLASS_NAME_PHOTO = "photo";
+
     @Autowired
     public AccommodationDetailView(AccommodationService accommodationService, BookingsService bookingsService, UserAuthenticationState userAuthenticationState) {
         this.accommodationService = accommodationService;
@@ -114,25 +119,18 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
                 bookingsService.bookAccommodation(booking, accommodationId, userAuthenticationState.getUserId());
                 showOnSuccessfullyBookedNotification();
             } catch (DataIntegrityViolationException e) {
-                Notification.show("Accommodation is already booked", 5000, Notification.Position.MIDDLE);
+                Notification.show(ACCOMMODATION_ALREADY_BOOKED, NOTIFICATION_DURATION_MS, Notification.Position.MIDDLE);
             } catch (UserNotAuthenticatedException e) {
-                Notification.show(e.getMessage(), 5000, Notification.Position.MIDDLE);
+                Notification.show(e.getMessage(), NOTIFICATION_DURATION_MS, Notification.Position.MIDDLE);
             }
 
         } else {
-            Notification.show("If you want to book this accommodation you have to log in or sign up.", 5000, Notification.Position.MIDDLE);
+            Notification.show(ACCOMMODATION_BOOKING_NOT_LOGGED_IN, NOTIFICATION_DURATION_MS, Notification.Position.MIDDLE);
         }
     }
 
     private void showOnSuccessfullyBookedNotification() {
-        Label label = new Label("Accommodation successfully booked");
-        Button button = new Button("OK");
-        Notification notification = new Notification(label, button);
-        button.addClickListener(e -> {
-            notification.close();
-            getUI().ifPresent(ui -> ui.getPage().reload());
-        });
-        notification.setPosition(Notification.Position.MIDDLE);
+        Notification notification = NotificationUtils.createNotification(ACCOMMODATION_BOOKED_SUCCESSFULLY, getUI());
         notification.open();
     }
 
@@ -146,14 +144,14 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
             setComponents(accommodation);
             disableBookedDays();
         } else {
-            Notification.show("Accommodation does not exist", 3000, Notification.Position.MIDDLE);
-            event.rerouteTo("");
+            Notification.show(ACCOMMODATION_NOT_EXIST, NOTIFICATION_DURATION_MS, Notification.Position.MIDDLE);
+            event.rerouteTo(HOME);
         }
     }
 
     private void disableBookedDays() {
         List<LocalDate> bookedDays = bookingsService.getBookedDays(accommodationId);
-        bookedDays.addAll(getLastNDaysFromNow(360));
+        bookedDays.addAll(getLastNDaysFromNow(LAST_N_DAYS_TO_DISABLE));
         bookingForm.setDisabledDays(bookedDays);
     }
 
@@ -167,18 +165,22 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
     private void setComponents(Accommodation accommodation) {
         accommodationName.setText(accommodation.getName());
         accommodationAddress.setText(accommodation.getAddress().getCountry() + ", " + accommodation.getAddress().getCity() + ", " + accommodation.getAddress().getStreet());
-        guests.setText(accommodation.getGuests() + " " + (accommodation.getGuests() == 1 ? "guest" : "guests"));
-        beds.setText(accommodation.getBathrooms() + " " + (accommodation.getBathrooms() == 1 ? "bed" : "beds"));
-        baths.setText(accommodation.getBathrooms() + " " + (accommodation.getBathrooms() == 1 ? "bath" : "baths"));
+        guests.setText(accommodation.getGuests() + " " + (accommodation.getGuests() == 1 ? GUEST : getPlural(GUEST)));
+        beds.setText(accommodation.getBathrooms() + " " + (accommodation.getBathrooms() == 1 ? BED : getPlural(BED)));
+        baths.setText(accommodation.getBathrooms() + " " + (accommodation.getBathrooms() == 1 ? BATH : getPlural(BATH)));
         accommodation.getPhotos().forEach(photo -> photos.add(createAccommodationDetailImage(photo.getUrl())));
 
         bookingForm.setPrice(accommodation.getPricePerNight());
     }
 
+    private String getPlural(String str) {
+        return str + "s";
+    }
+
     private Image createAccommodationDetailImage(String url) {
         Image image = new Image();
         image.setSrc(url);
-        image.setClassName("photo");
+        image.setClassName(CLASS_NAME_PHOTO);
         image.addListener(ClickEvent.class, event -> {
             photoModal.setVisible(true);
             photoModalImg.setSrc(((Image) event.getSource()).getSrc());

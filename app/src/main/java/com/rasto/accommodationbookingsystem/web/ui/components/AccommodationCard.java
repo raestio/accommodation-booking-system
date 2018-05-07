@@ -1,5 +1,6 @@
 package com.rasto.accommodationbookingsystem.web.ui.components;
 
+import com.rasto.accommodationbookingsystem.backend.constant.Constants;
 import com.vaadin.flow.component.HasClickListeners;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -43,6 +44,6 @@ public class AccommodationCard extends PolymerTemplate<TemplateModel> implements
 
     public void setPricePerNight(BigDecimal pricePerNight) {
         this.pricePerNight = pricePerNight;
-        pricePerNightLabel.setText(pricePerNight.toString() + " CZK");
+        pricePerNightLabel.setText(pricePerNight.toString() + " " + Constants.CURRENCY);
     }
 }

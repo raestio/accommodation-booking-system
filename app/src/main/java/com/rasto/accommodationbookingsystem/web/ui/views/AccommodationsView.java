@@ -1,6 +1,7 @@
 package com.rasto.accommodationbookingsystem.web.ui.views;
 
 import com.rasto.accommodationbookingsystem.HasLogger;
+import com.rasto.accommodationbookingsystem.backend.constant.MappingURLConstants;
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
 import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationCardDTO;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
@@ -66,7 +67,7 @@ public class AccommodationsView extends PolymerTemplate<TemplateModel> implement
         accommodationCard.setName(accommodationCardDTO.getName());
         accommodationCard.setPricePerNight(accommodationCardDTO.getPricePerNight());
         accommodationCard.setPhoto(accommodationCardDTO.getPhoto().getUrl());
-        accommodationCard.addClickListener(event -> event.getSource().getUI().ifPresent(ui -> ui.navigate("accommodations/" + event.getSource().getAccommodationId())));
+        accommodationCard.addClickListener(event -> event.getSource().getUI().ifPresent(ui -> ui.navigate(MappingURLConstants.ACCOMMODATIONS + "/" + event.getSource().getAccommodationId())));
         return accommodationCard;
     }
 

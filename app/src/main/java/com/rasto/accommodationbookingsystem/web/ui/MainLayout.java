@@ -1,8 +1,11 @@
 package com.rasto.accommodationbookingsystem.web.ui;
 
 import com.rasto.accommodationbookingsystem.HasLogger;
+import com.rasto.accommodationbookingsystem.backend.constant.MappingURLConstants;
 import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.components.SignUpDialog;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasClickListeners;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
@@ -18,6 +21,8 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import static com.rasto.accommodationbookingsystem.backend.constant.Constants.*;
+
 @HtmlImport("frontend://styles/shared-styles.html")
 @Viewport("width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
 @Theme(Lumo.class)
@@ -32,88 +37,54 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     private Button logout;
     private Button newAccommodation;
 
+    private final String CLASS_NAME_BUTTON = "main-layout-item";
+    private final String CLASS_NAME_TITLE = "main-layout-title";
+    private final String CLASS_NAME_NAV = "main-layout-nav";
+    private final String CLASS_NAME_HEADER = "main-layout-header";
+    private final String CLASS_NAME_LAYOUT = "main-layout";
+
     @Autowired
     public MainLayout(SignUpDialog signUpDialog, UserAuthenticationState userAuthenticationState){
         this.signUpDialog = signUpDialog;
         this.userAuthenticationState = userAuthenticationState;
-        H2 title = new H2("Booking system");
-        title.addClassName("main-layout-title");
+        H2 title = new H2(APP_TITLE);
+        title.addClassName(CLASS_NAME_TITLE);
         title.addClickListener(event -> getUI().ifPresent(ui -> ui.navigate("")));
 
-        signUp = createSignUpButton();
-        login = createLoginButton();
-        logout = createLogoutButton();
-        bookings = createBookingsButton();
-        newAccommodation = createNewAccommodationButton();
+        signUp = createButton(SIGN_UP, CLASS_NAME_BUTTON, e -> signUp());
+        login = createButton(LOG_IN, CLASS_NAME_BUTTON, e -> login());
+        logout = createButton(LOG_OUT, CLASS_NAME_BUTTON, e -> logout());
+        bookings = createButton(BOOKINGS, CLASS_NAME_BUTTON, e -> getUI().ifPresent(ui -> ui.navigate(MappingURLConstants.BOOKINGS)));
+        newAccommodation = createButton(NEW_ACCOMMODATION, CLASS_NAME_BUTTON, e -> getUI().ifPresent(ui -> ui.navigate(MappingURLConstants.NEW_ACCOMMODATION)));
 
         Div buttons = new Div(signUp, login, newAccommodation, bookings, logout);
-        buttons.addClassName("main-layout-nav");
+        buttons.addClassName(CLASS_NAME_NAV);
         Div header = new Div(title, buttons);
-        header.addClassName("main-layout-header");
+        header.addClassName(CLASS_NAME_HEADER);
         add(header);
-        addClassName("main-layout");
+        addClassName(CLASS_NAME_LAYOUT);
     }
 
-    private Button createNewAccommodationButton() {
-        newAccommodation = new Button();
-        newAccommodation.setText("New accommodation");
-        newAccommodation.setClassName("main-layout-item");
-        newAccommodation.setVisible(false);
-        newAccommodation.addClickListener(e -> {
-            getUI().ifPresent(ui -> ui.navigate("new-accommodation"));
-        });
-        return newAccommodation;
-    }
-
-    private Button createSignUpButton() {
-        signUp = new Button();
-        signUp.setText("Sign Up");
-        signUp.setClassName("main-layout-item");
-        signUp.setVisible(false);
-        signUp.addClickListener(e -> signUp());
-        return signUp;
-    }
-
-    private Button createLoginButton() {
-        login = new Button();
-        login.setText("Log In");
-        login.setClassName("main-layout-item");
-        login.setVisible(false);
-        login.addClickListener(e -> login());
-        return login;
-    }
-
-    private Button createLogoutButton() {
-        logout = new Button();
-        logout.setText("Log Out");
-        logout.setClassName("main-layout-item");
-        logout.setVisible(false);
-        logout.addClickListener(e -> logout());
-        return logout;
-    }
-
-    private Button createBookingsButton() {
-        bookings = new Button();
-        bookings.setText("Bookings");
-        bookings.setClassName("main-layout-item");
-        bookings.setVisible(false);
-        bookings.addClickListener(e -> {
-            getUI().ifPresent(ui -> ui.navigate("bookings"));
-        });
-        return bookings;
+    private Button createButton(String text, String className, ComponentEventListener<HasClickListeners.ClickEvent<Button>> buttonClickEvent) {
+        Button button = new Button();
+        button.setText(text);
+        button.setClassName(className);
+        button.setVisible(false);
+        button.addClickListener(buttonClickEvent);
+        return button;
     }
 
     private void logout() {
         getUI().ifPresent(ui -> {
             SecurityContextHolder.clearContext();
             ui.getSession().close();
-            ui.navigate("");
+            ui.navigate(MappingURLConstants.HOME);
             ui.getPage().reload();
         });
     }
 
     private void login() {
-        getUI().ifPresent(ui -> ui.navigate("login"));
+        getUI().ifPresent(ui -> ui.navigate(MappingURLConstants.LOG_IN));
     }
 
     private void signUp() {

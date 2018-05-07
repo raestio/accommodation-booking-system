@@ -16,12 +16,14 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.rasto.accommodationbookingsystem.backend.constant.Constants.*;
+
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SignUpDialog extends BaseFormDialog implements HasLogger {
 
-    private final Button signUpButton = new Button("Sign Up");
-    private final Button cancelButton = new Button("Cancel");
+    private final Button signUpButton = new Button(SIGN_UP);
+    private final Button cancelButton = new Button(CANCEL);
     private final TextField emailTextField = new TextField();
     private final TextField nameTextField = new TextField();
     private final TextField surnameTextField = new TextField();
@@ -30,6 +32,8 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
     private final Binder<User> binder = new Binder<>(User.class);
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+
+    private static final String PASSWORD_REGEX_VALIDATOR = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$";
 
     @Autowired
     public SignUpDialog(UserService userService, PasswordEncoder passwordEncoder) {
@@ -43,25 +47,25 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
     private void bindUser() {
         binder.setBean(userService.createNew());
         binder.forField(emailTextField)
-                .withValidator(new EmailValidator("Enter a valid email address"))
-                .withValidator(email -> !userService.exists(email), "User already exists")
+                .withValidator(new EmailValidator(EMAIL_VALIDATOR_MESSAGE))
+                .withValidator(email -> !userService.exists(email), USER_ALREADY_EXISTS)
                 .bind(user -> emailTextField.getEmptyValue(), User::setEmail);
 
         binder.forField(nameTextField)
                 .withConverter(String::trim, String::trim)
                 .withValidator(new StringLengthValidator(
-                        "Name must contain at least 1 printable character",
+                        NAME_VALIDATOR_MESSAGE,
                         1, null))
                 .bind(user -> nameTextField.getEmptyValue(), User::setName);
 
         binder.forField(surnameTextField)
                 .withConverter(String::trim, String::trim)
                 .withValidator(new StringLengthValidator(
-                        "Surname must contain at least 1 printable character",
+                        SURNAME_VALIDATOR_MESSAGE,
                         1, null))
                 .bind(user -> surnameTextField.getEmptyValue(), User::setSurname);
 
-        binder.forField(passwordField).withValidator(pass -> pass.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$"), "Need 6 or more chars, mixing digits, letters and special characters")
+        binder.forField(passwordField).withValidator(pass -> pass.matches(PASSWORD_REGEX_VALIDATOR), PASSWORD_VALIDATOR_MESSAGE)
                 .bind(user -> passwordField.getEmptyValue(), (user, pass) -> {
                     if (!passwordField.getEmptyValue().equals(pass)) {
                         user.setPassword(passwordEncoder.encode(pass));
@@ -78,13 +82,13 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
         initButtons();
         addButtons(signUpButton, cancelButton);
         initEmailField();
-        initField(nameTextField, "Name");
-        initField(surnameTextField, "Surname");
+        initField(nameTextField, NAME);
+        initField(surnameTextField, SURNAME);
         initPasswordField();
     }
 
     private void initPasswordField() {
-        passwordField.setLabel("Password");
+        passwordField.setLabel(PASSWORD);
         passwordField.setValueChangeMode(ValueChangeMode.EAGER);
         passwordField.setRequired(true);
         getFormLayout().add(passwordField);
@@ -121,7 +125,7 @@ public class SignUpDialog extends BaseFormDialog implements HasLogger {
     }
 
     private void initEmailField() {
-        emailTextField.setLabel("Email (login)");
+        emailTextField.setLabel(EMAIL_LOGIN);
         emailTextField.setRequired(true);
         getFormLayout().add(emailTextField);
     }
