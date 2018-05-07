@@ -36,9 +36,9 @@ public class MainLayout extends Div implements RouterLayout, PageConfigurator, B
     public MainLayout(SignUpDialog signUpDialog, UserAuthenticationState userAuthenticationState){
         this.signUpDialog = signUpDialog;
         this.userAuthenticationState = userAuthenticationState;
-        H2 title = new H2("Airbnb");
+        H2 title = new H2("Booking system");
         title.addClassName("main-layout-title");
-
+        title.addClickListener(event -> getUI().ifPresent(ui -> ui.navigate("")));
 
         signUp = createSignUpButton();
         login = createLoginButton();
