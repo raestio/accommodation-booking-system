@@ -13,6 +13,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @RouteAlias(value = "accommodations", layout = MainLayout.class)
 @Tag("accommodations-view")
 @HtmlImport("src/views/accommodations-view.html")
+@PageTitle("Accommodations")
 public class AccommodationsView extends PolymerTemplate<TemplateModel> implements HasLogger {
 
     @Id("searchField")

@@ -10,6 +10,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Route(value = "login", layout = MainLayout.class)
 @Tag("login-view")
 @HtmlImport("src/views/login-view.html")
+@PageTitle("Login")
 public class LoginView extends PolymerTemplate<TemplateModel> implements HasLogger {
 
     @Id("emailField")
