@@ -32,6 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Route(value = "accommodations", layout = MainLayout.class)
 @Tag("accommodation-detail")
@@ -146,7 +148,15 @@ public class AccommodationDetailView extends PolymerTemplate<TemplateModel> impl
 
     private void disableBookedDays() {
         List<LocalDate> bookedDays = bookingsService.getBookedDays(accommodationId);
+        bookedDays.addAll(getLastNDaysFromNow(360));
         bookingForm.setDisabledDays(bookedDays);
+    }
+
+    private List<LocalDate> getLastNDaysFromNow(int days) {
+        LocalDate now = LocalDate.now();
+        return IntStream.iterate(1, i -> i + 1).limit(days)
+                .mapToObj(now::minusDays)
+                .collect(Collectors.toList());
     }
 
     private void setComponents(Accommodation accommodation) {
