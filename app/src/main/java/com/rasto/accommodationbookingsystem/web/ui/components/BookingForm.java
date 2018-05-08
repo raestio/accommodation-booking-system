@@ -19,13 +19,15 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.rasto.accommodationbookingsystem.backend.constant.Constants.CURRENCY;
+import static com.rasto.accommodationbookingsystem.backend.constant.Constants.DATE_FORMATTER_PATTERN;
+
 
 @Tag("booking-form")
 @HtmlImport("src/components/booking-form.html")
 public class BookingForm extends PolymerTemplate<BookingForm.Model> implements HasLogger {
 
-    public final String CURRENCY_DEFAULT = "CZK";
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMATTER_PATTERN);
 
     private String currency;
     private BigDecimal totalPrice;
@@ -52,7 +54,7 @@ public class BookingForm extends PolymerTemplate<BookingForm.Model> implements H
     public BookingForm() {
         bookButton.setEnabled(false);
         setTotalVisible(false);
-        currency = CURRENCY_DEFAULT;
+        currency = CURRENCY;
     }
 
     public void setTotalVisible(boolean visible) {

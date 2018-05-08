@@ -1,5 +1,7 @@
 package com.rasto.accommodationbookingsystem.web.ui.views;
 
+import com.rasto.accommodationbookingsystem.backend.constant.Constants;
+import com.rasto.accommodationbookingsystem.backend.constant.MappingURLConstants;
 import com.rasto.accommodationbookingsystem.backend.data.entity.Booking;
 import com.rasto.accommodationbookingsystem.backend.exception.UserNotAuthenticatedException;
 import com.rasto.accommodationbookingsystem.backend.service.BookingsService;
@@ -28,7 +30,7 @@ import java.util.List;
 @PageTitle("My Bookings")
 public class UserBookingsView extends PolymerTemplate<TemplateModel> implements BeforeEnterObserver {
 
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMATTER_PATTERN);
 
     @Id("bookingsVerticalLayout")
     private VerticalLayout bookingsVerticalLayout;
@@ -54,7 +56,7 @@ public class UserBookingsView extends PolymerTemplate<TemplateModel> implements 
             List<Booking> userBookings = bookingService.getBookingsByUserIdOrderedByCheckIn(userAuthenticationState.getUserId());
             setBookingsLayout(userBookings);
         } catch (UserNotAuthenticatedException e) {
-            Notification.show(e.getMessage(), 5000, Notification.Position.MIDDLE);
+            Notification.show(e.getMessage(), Constants.NOTIFICATION_DURATION_MS, Notification.Position.MIDDLE);
             getUI().ifPresent(ui -> ui.navigate(""));
         }
     }
@@ -68,9 +70,9 @@ public class UserBookingsView extends PolymerTemplate<TemplateModel> implements 
         bookingItem.setPhotoSrc(booking.getAccommodation().getPhotos().get(0).getUrl());
         bookingItem.setAccommodationId(booking.getAccommodation().getId());
         bookingItem.setCity(booking.getAccommodation().getAddress().getCity());
-        bookingItem.setPrice(booking.getPrice().toString() + " CZK");
+        bookingItem.setPrice(booking.getPrice().toString() + " " + Constants.CURRENCY);
         bookingItem.setCheckInCheckOut(booking.getCheckIn().format(dateTimeFormatter) + " - " + booking.getCheckOut().format(dateTimeFormatter));
-        bookingItem.addClickListener(item -> getUI().ifPresent(ui -> ui.navigate("accommodations/" + item.getSource().getAccommodationId())));
+        bookingItem.addClickListener(item -> getUI().ifPresent(ui -> ui.navigate(MappingURLConstants.ACCOMMODATIONS + "/" + item.getSource().getAccommodationId())));
         return bookingItem;
     }
 }

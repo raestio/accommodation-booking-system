@@ -47,6 +47,7 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
+    @Transactional
     public Photo saveOrUpdate(Photo entity) {
         return photoRepository.saveAndFlush(entity);
     }

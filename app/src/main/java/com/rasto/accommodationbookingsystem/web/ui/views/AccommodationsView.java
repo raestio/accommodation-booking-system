@@ -1,6 +1,7 @@
 package com.rasto.accommodationbookingsystem.web.ui.views;
 
 import com.rasto.accommodationbookingsystem.HasLogger;
+import com.rasto.accommodationbookingsystem.backend.constant.MappingURLConstants;
 import com.rasto.accommodationbookingsystem.backend.service.AccommodationService;
 import com.rasto.accommodationbookingsystem.backend.service.dto.AccommodationCardDTO;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
@@ -13,6 +14,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @RouteAlias(value = "accommodations", layout = MainLayout.class)
 @Tag("accommodations-view")
 @HtmlImport("src/views/accommodations-view.html")
+@PageTitle("Accommodations")
 public class AccommodationsView extends PolymerTemplate<TemplateModel> implements HasLogger {
 
     @Id("searchField")
@@ -64,7 +67,7 @@ public class AccommodationsView extends PolymerTemplate<TemplateModel> implement
         accommodationCard.setName(accommodationCardDTO.getName());
         accommodationCard.setPricePerNight(accommodationCardDTO.getPricePerNight());
         accommodationCard.setPhoto(accommodationCardDTO.getPhoto().getUrl());
-        accommodationCard.addClickListener(event -> event.getSource().getUI().ifPresent(ui -> ui.navigate("accommodations/" + event.getSource().getAccommodationId())));
+        accommodationCard.addClickListener(event -> event.getSource().getUI().ifPresent(ui -> ui.navigate(MappingURLConstants.ACCOMMODATIONS + "/" + event.getSource().getAccommodationId())));
         return accommodationCard;
     }
 

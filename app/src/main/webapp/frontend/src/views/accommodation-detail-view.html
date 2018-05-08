@@ -15,39 +15,40 @@
         <style include="view-styles">
 
         </style>
-
-        <div class="accommodation_div">
-            <span id="accommodationName" class="accommodation_name"></span>
-        </div>
-
-        <div class="accommodation_div">
-            <span id="accommodationAddress" class="accommodation_address"></span>
-        </div>
-
-        <vaadin-horizontal-layout class="accommodation_div" theme="spacing-xl" style="margin-top: 1em">
-            <div>
-                <iron-icon icon="vaadin:group"></iron-icon>
-                <span id="guests"></span>
+        <div style="background: rgba(244, 245, 249, 1)">
+            <div class="accommodation-div">
+                <span id="accommodationName" class="accommodation-name"></span>
             </div>
-            <div>
-                <iron-icon icon="vaadin:bed"></iron-icon>
-                <span id="beds"></span>
+
+            <div class="accommodation-div">
+                <span id="accommodationAddress" class="accommodation-address"></span>
             </div>
-            <div>
-                <iron-icon icon="vaadin:lifebuoy"></iron-icon>
-                <span id="baths"></span>
+
+            <vaadin-horizontal-layout class="accommodation-div" theme="spacing-xl" style="margin-top: 1em">
+                <div>
+                    <iron-icon icon="vaadin:group"></iron-icon>
+                    <span id="guests"></span>
+                </div>
+                <div>
+                    <iron-icon icon="vaadin:bed"></iron-icon>
+                    <span id="beds"></span>
+                </div>
+                <div>
+                    <iron-icon icon="vaadin:lifebuoy"></iron-icon>
+                    <span id="baths"></span>
+                </div>
+            </vaadin-horizontal-layout>
+
+            <board-layout id="photos"></board-layout>
+
+            <div class="accommodation-div">
+                <booking-form id="bookingForm"></booking-form>
             </div>
-        </vaadin-horizontal-layout>
 
-        <board-layout id="photos"></board-layout>
-
-        <div class="accommodation_div">
-            <booking-form id="bookingForm"></booking-form>
-        </div>
-
-        <div id="photoModal" class="photo-modal">
-            <span id="photoModalClose" class="photo-modal-close">&times;</span>
-            <img id="photoModalImg" class="photo-modal-content">
+            <div id="photoModal" class="photo-modal">
+                <span id="photoModalClose" class="photo-modal-close">&times;</span>
+                <img id="photoModalImg" class="photo-modal-content">
+            </div>
         </div>
     </template>
 

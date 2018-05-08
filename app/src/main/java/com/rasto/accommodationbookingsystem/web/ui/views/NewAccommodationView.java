@@ -11,6 +11,7 @@ import com.rasto.accommodationbookingsystem.backend.service.AddressService;
 import com.rasto.accommodationbookingsystem.security.UserAuthenticationState;
 import com.rasto.accommodationbookingsystem.web.ui.MainLayout;
 import com.rasto.accommodationbookingsystem.web.ui.components.DropdownItem;
+import com.rasto.accommodationbookingsystem.web.ui.utils.NotificationUtils;
 import com.rasto.accommodationbookingsystem.web.ui.utils.PhotoReceiver;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasClickListeners;
@@ -37,19 +38,19 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.BiConsumer;
+
+import static com.rasto.accommodationbookingsystem.backend.constant.Constants.*;
 
 @Route(value = "new-accommodation", layout = MainLayout.class)
 @Tag("new-accommodation-view")
 @HtmlImport("src/views/new-accommodation-view.html")
 @PageTitle("New accommodation")
 public class NewAccommodationView extends PolymerTemplate<TemplateModel> implements BeforeEnterObserver, HasLogger {
-
-    private final static String FIELD_EMPTY_ERROR_MESSAGE = "Field can not be empty";
-    private final static int FIELD_MIN_LENGTH = 1;
 
     private final AccommodationTypesService accommodationTypesService;
     private final UserAuthenticationState userAuthenticationState;
@@ -100,6 +101,9 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
     private final Binder<Address> addressBinder = new Binder<>(Address.class);
     private AccommodationTypeEnum chosenAccommodationTypeEnum;
     private PhotoReceiver photoReceiver;
+    private boolean createYesButtonClicked;
+
+    private static final String CLASS_NAME_DROPDOWN_ITEM = "dropdown-item";
 
     @Autowired
     public NewAccommodationView(AccommodationService accommodationService, AccommodationTypesService accommodationTypesService,
@@ -124,7 +128,7 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
 
     private DropdownItem<AccommodationTypeEnum> createDropdownItem(AccommodationType type) {
         DropdownItem<AccommodationTypeEnum> item = new DropdownItem<>();
-        item.setClassName("dropdown-item");
+        item.setClassName(CLASS_NAME_DROPDOWN_ITEM);
         item.setText(type.getName().toString());
         item.setValue(type.getName());
         item.addClickListener((ComponentEventListener<HasClickListeners.ClickEvent<Button>>) event -> {
@@ -202,23 +206,12 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
     }
 
     private void createAccommodation() {
+        createYesButtonClicked = false;
         if (isFormReady()) {
             Accommodation accommodation = accommodationBinder.getBean();
             AccommodationType type = accommodationTypeBinder.getBean();
             Address address = addressBinder.getBean();
-
-            try {
-                showProgressBar(true); //TODO progress bar has to show immediately (before saving accommodation)
-                accommodationService.saveAccommodationWithPhotos(accommodation, type, address, photoReceiver.getFiles());
-                showProgressBar(false);
-                showOnSuccessfullyCreatedAccommodationNotification();
-            } catch (IOException e) {
-                Notification.show("Uploading photos failed", 3000, Notification.Position.MIDDLE);
-                e.printStackTrace();
-            } catch (RuntimeException e) {
-                Notification.show("Image size too large", 3000, Notification.Position.MIDDLE);
-                e.printStackTrace();
-            }
+            showCreateConfirmNotification(accommodation, type, address, photoReceiver.getFiles());
         } else {
             createButton.setEnabled(false);
         }
@@ -234,15 +227,51 @@ public class NewAccommodationView extends PolymerTemplate<TemplateModel> impleme
         }
     }
 
-    private void showOnSuccessfullyCreatedAccommodationNotification() {
-        Label label = new Label("Accommodation successfully added");
-        Button button = new Button("OK");
-        Notification notification = new Notification(label, button);
-        button.addClickListener(e -> {
-            notification.close();
-            getUI().ifPresent(ui -> ui.getPage().reload());
+    private void showCreateConfirmNotification(Accommodation accommodation, AccommodationType type, Address address, List<File> files) {
+        Label label = new Label(CREATE_ACCOMMODATION_NOTIFICATION_SURE);
+        Button yes = getYesButton();
+        Button no = getNoButton();
+
+        Notification notification = new Notification(label, new Div(yes, no));
+        yes.addClickListener(e -> {
+            if (!createYesButtonClicked) {
+                createYesButtonClicked = true;
+                showProgressBar(true); //TODO progress bar has to show immediately
+                try {
+                    accommodationService.saveAccommodationWithPhotos(accommodation, type, address, files);
+                    notification.close();
+                    showOnSuccessfullyCreatedAccommodationNotification();
+                } catch (IOException | RuntimeException exc) {
+                    notification.close();
+                    Notification.show(UPLOADING_PHOTOS_FAILED, NOTIFICATION_DURATION_MS, Notification.Position.MIDDLE);
+                    exc.printStackTrace();
+                }
+                showProgressBar(false);
+            }
         });
+
+        no.addClickListener(e -> {
+            notification.close();
+            showProgressBar(false);
+        });
+
+        showProgressBar(true);
         notification.setPosition(Notification.Position.MIDDLE);
+        notification.open();
+    }
+
+    private Button getNoButton() {
+        return new Button(NO);
+    }
+
+    private Button getYesButton() {
+        Button button = new Button(YES);
+        button.getElement().setAttribute("theme", "primary");
+        return button;
+    }
+
+    private void showOnSuccessfullyCreatedAccommodationNotification() {
+        Notification notification = NotificationUtils.createNotification(ACCOMMODATION_ADDED_SUCCESS, getUI());
         notification.open();
     }
 

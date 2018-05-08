@@ -5,6 +5,7 @@ import com.rasto.accommodationbookingsystem.backend.repository.AddressRepository
 import com.rasto.accommodationbookingsystem.backend.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,16 +36,19 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public Address saveOrUpdate(Address entity) {
         return addressRepository.saveAndFlush(entity);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         addressRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void delete(Address entity) {
         addressRepository.delete(entity);
     }

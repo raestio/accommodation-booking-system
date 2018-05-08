@@ -85,7 +85,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         }
 
         accommodation.setPhotos(photoEntities);
-        return saveOrUpdate(accommodation);
+        return accommodationRepository.saveAndFlush(accommodation);
     }
 
     @Override
@@ -104,6 +104,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
+    @Transactional
     public Accommodation saveOrUpdate(Accommodation entity) {
         return accommodationRepository.saveAndFlush(entity);
     }
