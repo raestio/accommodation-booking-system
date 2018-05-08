@@ -29,6 +29,7 @@ User
 * [Vaadin Flow]
 * [PostgreSQL]
 * [Cloudinary]
+* [Docker]
 
 [Spring Boot]: <https://projects.spring.io/spring-boot/>
 [Spring Data JPA]: <https://projects.spring.io/spring-data-jpa/>
@@ -36,7 +37,7 @@ User
 [Vaadin Flow]: <https://vaadin.com/flow>
 [PostgreSQL]: <https://www.postgresql.org/>
 [Cloudinary]: <https://cloudinary.com/>
-
+[Docker]: <https://docker.com/>
 
 # Screenshots
 ![screenshot_1]
