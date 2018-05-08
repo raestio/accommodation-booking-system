@@ -1,0 +1,20 @@
+version: '2'
+services:
+    db:
+        container_name: accommodation-booking-system-db
+        image: postgres:9.5
+        volumes:
+            - ../database-scripts/create_tables.sql:/docker-entrypoint-initdb.d/1-create_tables.sql
+            - ../database-scripts/insert.sql:/docker-entrypoint-initdb.d/2-insert.sql.sql
+            - ../database-scripts/test_data_insert.sql:/docker-entrypoint-initdb.d/3-test_data_insert.sql
+            - accommodation-booking-system-db:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD=test
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=accommodation_booking_system_database
+            - PGDATA=/var/lib/postgresql/data/pgdata
+        ports:
+            - 5432:5432
+
+volumes:
+    accommodation-booking-system-db: {}
