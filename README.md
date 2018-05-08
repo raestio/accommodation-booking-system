@@ -6,7 +6,7 @@ Inspired by AirBnb
 ```sh
 $ git clone https://github.com/raestio/accommodation-booking-system.git
 $ cd accommodation-booking-system/app/
-$ docker-compose up
+$ docker-compose up #see issue #1
 
 Type localhost:8080 in Google Chrome (In Firefox it does not work correctly) 
 
