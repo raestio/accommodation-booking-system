@@ -41,6 +41,7 @@ User
 
 # Screenshots
 ![screenshot_1]
+![screenshot_2]
 ![screenshot_3]
 ![screenshot_4]
 ![screenshot_5]
