@@ -6,6 +6,7 @@ services:
           - 8080:8080
       depends_on:
           - db
+      command: ["./wait-for-postgres.sh", "db", "java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
     db:
         container_name: accommodation-booking-system-db
         image: postgres:9.5
@@ -15,7 +16,7 @@ services:
             - accommodation-booking-system-db:/var/lib/postgresql/data
         environment:
             - POSTGRES_PASSWORD=test
-            - POSTGRES_USER=test
+            - POSTGRES_USER=postgres
             - POSTGRES_DB=accommodation_booking_system_database
             - PGDATA=/var/lib/postgresql/data/pgdata
         ports:
