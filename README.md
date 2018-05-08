@@ -10,8 +10,7 @@ $ docker-compose up #postgres starts
 $ mvn package  #app builds
 $ java -jar target/accommodation-booking-system-1.0.0.beta.jar #app starts (it will connect to postgres running in Docker)
 
-Type localhost:8080 in Google Chrome (In Firefox it does not work correctly) 
-
+Type localhost:8080 in Google Chrome (In Firefox it does not work correctly).
 Some test accounts are created in advance so you can log in with them to test it out:
 
 Admin
