@@ -48,7 +48,7 @@ User
 
 
 [screenshot_1]: https://res.cloudinary.com/accommodation-booking-system/image/upload/v1525779076/1.jpg "Home page (admin)"
-[screenshot_2]: https://res.cloudinary.com/accommodation-booking-system/image/upload/v1525779076/3.jpg "Book accommodation"
+[screenshot_2]: https://res.cloudinary.com/accommodation-booking-system/image/upload/v1525779076/3.jpg "Book accommodation (user or admin)"
 [screenshot_3]: https://res.cloudinary.com/accommodation-booking-system/image/upload/v1525779075/4.jpg "Create accommodation"
 [screenshot_4]: https://res.cloudinary.com/accommodation-booking-system/image/upload/v1525779076/5.jpg "Your bookings"
 [screenshot_5]: https://res.cloudinary.com/accommodation-booking-system/image/upload/v1525779076/6.jpg "Sign Up"
