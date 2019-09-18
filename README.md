@@ -23,6 +23,7 @@ User
 ```
 
 ### Tech
+* [Spring MVC]
 * [Spring Boot]
 * [Spring Data JPA]
 * [Spring Security]
@@ -31,6 +32,7 @@ User
 * [Cloudinary]
 * [Docker]
 
+[Spring MVC]: <https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html>
 [Spring Boot]: <https://projects.spring.io/spring-boot/>
 [Spring Data JPA]: <https://projects.spring.io/spring-data-jpa/>
 [Spring Security]: <https://projects.spring.io/spring-security/>
